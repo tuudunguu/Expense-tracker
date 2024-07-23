@@ -67,3 +67,14 @@
     @apply bg-background text-foreground;
   }
 }
+
+h6 {
+  @apply text-base font-normal text-[#0F172A];
+}
+h5 {
+  @apply text-base font-semibold text-[#0F172A];
+}
+
+h4 {
+  @apply text-2xl font-semibold text-[#000];
+}
