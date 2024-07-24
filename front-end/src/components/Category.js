@@ -5,7 +5,7 @@ export const Category = ({ content }) => {
         <img src="/pictures/eye icon.png" className="w-5 h-5" />
         <h6>{content}</h6>
       </div>
-      <img src="/pictures/next icon.png" className="w-5 h-5" />
+      <img src="/pictures/next icon.png" className="w-8 h-8" />
     </div>
   );
 };

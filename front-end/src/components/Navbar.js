@@ -1,5 +1,6 @@
 import { Container } from "./Container";
-import { Button } from "./ui/button";
+
+import { OverlayCard } from "./OverlayCard";
 
 export const Navbar = ({ background, children }) => {
   return (
@@ -11,10 +12,8 @@ export const Navbar = ({ background, children }) => {
           <h5>Records</h5>
         </div>
         <div className="w-fit h-fit flex flex-row justify-center items-center gap-x-6">
-          <Button className="flex gap-x-2 bg-[#0166FF] h-8 rounded-3xl">
-            <img src="/pictures/Leading icon.png" className="" />
-            <h6 className="text-white">Records</h6>
-          </Button>
+          <OverlayCard open="records" />
+
           <img src="/pictures/Placeholder.png" className="w-[28px] h-[28px]" />
         </div>
       </div>
