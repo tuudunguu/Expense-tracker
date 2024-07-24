@@ -1,12 +1,4 @@
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -27,13 +19,15 @@ export const OverlayCard = ({ open, width }) => {
         </Button>
       </DialogTrigger>
       <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Are you absolutely sure?</DialogTitle>
-          <DialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </DialogDescription>
-        </DialogHeader>
+        {/* <div className="flex flex-col justify-between items-start w-full h-full gap-y-10">
+          <h4>Add Record</h4>
+          <div className="w-full h-full flex flex-row justify-center items-center gap-x-12">
+            <div className="w-full h-full flex flex-col justify-center items-center gap-y-5">
+              <div className="w-full h-fit flex flex-row justify-center items-center "></div>
+            </div>
+            <div className="w-full h-full flex flex-col justify-center items-center"></div>
+          </div>
+        </div> */}
       </DialogContent>
     </Dialog>
   );
