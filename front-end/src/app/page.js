@@ -4,10 +4,9 @@ import { OverlayCard } from "@/components/OverlayCard";
 
 export default function Home() {
   return (
-    <div className="relative">
+    <div>
       <Navbar />
       <Records />
-      <OverlayCard />
     </div>
   );
 }

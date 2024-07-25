@@ -1,11 +1,24 @@
+"use client";
+
+import React, { useState } from "react";
+import { IoEye } from "react-icons/io5";
+import { IoEyeOff } from "react-icons/io5";
+import { MdOutlineNavigateNext } from "react-icons/md";
+
 export const Category = ({ content }) => {
+  const [eye, setEye] = useState(true);
+
+  const handleSwitch = () => {
+    setEye(!eye);
+  };
   return (
     <div className="w-[250px] h-[32px] flex flex-row justify-between items-center">
       <div className="w-fit h-full flex flex-row justify-center items-center gap-x-2">
-        <img src="/pictures/eye icon.png" className="w-5 h-5" />
+        <button onClick={handleSwitch}>{eye ? <IoEye /> : <IoEyeOff />}</button>
+
         <h6>{content}</h6>
       </div>
-      <img src="/pictures/next icon.png" className="w-8 h-8" />
+      <MdOutlineNavigateNext />
     </div>
   );
 };

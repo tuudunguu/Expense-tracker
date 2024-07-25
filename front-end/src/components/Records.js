@@ -1,3 +1,5 @@
+"use client";
+
 import { Container } from "./Container";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -11,6 +13,7 @@ import { FaAngleRight } from "react-icons/fa";
 import { Checkbox } from "@/components/ui/checkbox";
 import { InfoCard } from "./Info-card";
 import { OverlayCard } from "./OverlayCard";
+import React, { useState } from "react";
 
 import {
   Select,
@@ -48,12 +51,17 @@ const cardData = [
 ];
 
 export const Records = ({}) => {
+  const [values, setValues] = useState([0, 1000]);
+
+  const handleSliderChange = (newValues) => {
+    setValues(newValues);
+  };
   return (
     <Container background="bg-[#F3F4F6]" height="h-[1080px]">
       <div className="w-full h-full flex flex-row justify-between items-center py-6 ">
         <div className="w-fit h-full px-4 py-6 flex flex-col justify-between items-start gap-y-6 bg-white rounded-xl">
           <h4>Records</h4>
-          <OverlayCard open="Add" />
+          <OverlayCard open="Add" width="w-full" />
           <Input
             type="search"
             placeholder="Search"
@@ -96,16 +104,23 @@ export const Records = ({}) => {
             <div className="flex flex-col justify-center items-center w-full h-fit gap-y-4">
               <div className="flex flex-row justify-between items-center w-full h-fit gap-x-4">
                 <div className="w-full p-4 bg-[#F3F4F6] rounded-lg border-2 border-[#D1D5DB]">
-                  <h6>0</h6>
+                  <h6>{values[0]}</h6>
                 </div>
                 <div
                   className="w-full p-4 bg-[#F3F4F6] rounded-lg border-2
                   border-[#D1D5DB]"
                 >
-                  <h6>1000</h6>
+                  <h6>{values[1]}</h6>
                 </div>
               </div>
-              <Slider defaultValue={[33]} max={100} step={4} />
+              <Slider
+                defaultValue={[0, 1000]}
+                value={values}
+                onValueChange={handleSliderChange}
+                max={1000}
+                step={5}
+                range
+              />
               <div className="w-full h-fit flex flex-row justify-between items-center">
                 <h6>0</h6>
                 <h6>1000</h6>
