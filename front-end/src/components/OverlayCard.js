@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Dialog,
   DialogContent,
@@ -19,8 +21,19 @@ import { DatePickerWithPresets } from "@/components/Calendar";
 import { TimePicker } from "@/components/Time-picker";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useState } from "react";
+
+import { AddCategory } from "./OverlayAddCategory";
 
 export const OverlayCard = ({ open, width }) => {
+  const [expense, setExpense] = useState(true);
+  const [income, setIncome] = useState(true);
+
+  const handleColorChange = () => {
+    setExpense(!expense);
+  };
+  console.log(handleColorChange);
+
   return (
     <Dialog>
       <DialogTrigger
@@ -35,11 +48,26 @@ export const OverlayCard = ({ open, width }) => {
           <div className="w-full h-full flex flex-row justify-between items-center gap-x-12">
             <div className="w-full h-full flex flex-col justify-between items-center gap-y-5 flex-1">
               <div className="w-full h-fit flex flex-row justify-center items-center ">
-                <Button className="w-[148px] h-[40px] px-3 rounded-[20px] bg-[#0166FF]">
-                  <h6 className="text-white">Expense</h6>
+                <Button
+                  onClick={handleColorChange}
+                  className={`w-[148px] h-[40px] px-3 rounded-[20px] ${
+                    expense ? "bg-[#0166FF]" : "bg-[#F3F4F6]"
+                  }`}
+                >
+                  <h6 className={` ${expense ? "text-white" : "text-black"}`}>
+                    Expense
+                  </h6>
                 </Button>
-                <Button className="w-[148px] h-[40px] px-3 rounded-[20px] bg-[#F3F4F6] text-[]">
-                  <h6 className="text-black">Income</h6>
+
+                <Button
+                  onClick={handleColorChange}
+                  className={`w-[148px] h-[40px] px-3 rounded-[20px] ${
+                    expense ? "bg-[#F3F4F6]" : "bg-[#16A34A]"
+                  }`}
+                >
+                  <h6 className={` ${expense ? "text-black" : "text-white"}`}>
+                    Income
+                  </h6>
                 </Button>
               </div>
               <div className="w-full h-[76px] px-4 py-3 rounded-xl border-2 border-[#D1D5DB]">
@@ -55,11 +83,14 @@ export const OverlayCard = ({ open, width }) => {
               </div>
               <div className="w-full h-fit flex flex-col justify-start items-start gap-y-1">
                 <h6>Category</h6>
-                <Select className="border-2 border-[#D1D5DB]">
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Choose" />
+                <Select>
+                  <SelectTrigger className="w-full h-12 border-2 border-[#D1D5DB]">
+                    <SelectValue placeholder="Find or choose category" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem>
+                      <AddCategory open="Add Category" />
+                    </SelectItem>
                     <SelectItem value="lFood and Drink">
                       Food and Drink
                     </SelectItem>
@@ -91,10 +122,19 @@ export const OverlayCard = ({ open, width }) => {
                 </div>
                 <div className="w-full h-fit flex flex-col justify-start items-start gap-y-1">
                   <h6>Time</h6>
-                  <TimePicker className="w-full" />
+                  <Input
+                    type="time"
+                    className="w-full h-fit border-2 border-[#D1D5DB] rounded-[8px]"
+                  />
                 </div>
               </div>
-              <Button className="w-full bg-[#0166FF]">Add Record</Button>
+              <Button
+                className={`w-full ${
+                  expense ? "bg-[#0166FF]" : "bg-[#16A34A]"
+                }`}
+              >
+                Add Record
+              </Button>
             </div>
             <div className="w-full h-full flex flex-col justify-center items-start flex-1">
               <h6>Payee</h6>
