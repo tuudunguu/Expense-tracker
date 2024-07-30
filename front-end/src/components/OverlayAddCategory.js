@@ -1,5 +1,7 @@
 "use client";
 
+import { IconSelecter } from "../components/Icon-selecter";
+
 import {
   Dialog,
   DialogContent,
@@ -15,24 +17,22 @@ export const AddCategory = ({ open }) => {
 
   return (
     <Dialog>
-      <DialogTrigger>
-        <Button>{open}</Button>
+      <DialogTrigger className="w-full flex justify-start pl-8 pb-2 pt-2 border-b-2 border-[#D1D5DB] hover:bg-[#D1D5DB] ">
+        <h6 className="text-sm">{open}</h6>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="w-[494px] h-[236px]">
         <DialogHeader>
-          <DialogTitle>Add New Category</DialogTitle>
-          <DialogDescription>
-            Add your new category details below.
-          </DialogDescription>
+          <DialogTitle>Add Category</DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col gap-y-4">
+        <div className="flex flex-row gap-x-4 justify-between items-center">
+          <IconSelecter />
           <input
             type="text"
-            placeholder="Category Name"
-            className="border p-2 rounded"
+            placeholder="Name"
+            className="border p-2 rounded w-full "
           />
-          <Button>Add Category</Button>
         </div>
+        <Button>Add Category</Button>
       </DialogContent>
     </Dialog>
   );

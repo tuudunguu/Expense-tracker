@@ -14,6 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { InfoCard } from "./Info-card";
 import { OverlayCard } from "./OverlayCard";
 import React, { useState } from "react";
+import { AddCategory } from "./OverlayAddCategory";
 
 import {
   Select,
@@ -62,6 +63,7 @@ export const Records = ({}) => {
         <div className="w-fit h-full px-4 py-6 flex flex-col justify-between items-start gap-y-6 bg-white rounded-xl">
           <h4>Records</h4>
           <OverlayCard open="Add" width="w-full" />
+
           <Input
             type="search"
             placeholder="Search"

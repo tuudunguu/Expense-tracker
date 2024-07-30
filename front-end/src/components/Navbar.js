@@ -1,6 +1,7 @@
 import { Container } from "./Container";
 
 import { OverlayCard } from "./OverlayCard";
+import Link from "next/link";
 
 export const Navbar = ({ background, children }) => {
   return (
@@ -14,7 +15,12 @@ export const Navbar = ({ background, children }) => {
         <div className="w-fit h-fit flex flex-row justify-center items-center gap-x-6">
           <OverlayCard open="records" />
 
-          <img src="/pictures/Placeholder.png" className="w-[28px] h-[28px]" />
+          <Link href="/Log-in">
+            <img
+              src="/pictures/Placeholder.png"
+              className="w-[28px] h-[28px]"
+            />
+          </Link>
         </div>
       </div>
     </Container>

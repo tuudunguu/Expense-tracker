@@ -1,5 +1,6 @@
 "use client";
 
+import { ChooseTheCategory } from "./ChooseTheCategory";
 import {
   Dialog,
   DialogContent,
@@ -83,37 +84,7 @@ export const OverlayCard = ({ open, width }) => {
               </div>
               <div className="w-full h-fit flex flex-col justify-start items-start gap-y-1">
                 <h6>Category</h6>
-                <Select>
-                  <SelectTrigger className="w-full h-12 border-2 border-[#D1D5DB]">
-                    <SelectValue placeholder="Find or choose category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem>
-                      <AddCategory open="Add Category" />
-                    </SelectItem>
-                    <SelectItem value="lFood and Drink">
-                      Food and Drink
-                    </SelectItem>
-                    <SelectItem value="Shopping">Shopping</SelectItem>
-                    <SelectItem value="Housing">Housing</SelectItem>
-                    <SelectItem value="Transportation">
-                      Transportation
-                    </SelectItem>
-                    <SelectItem value="Vehicle">Vehicle</SelectItem>
-                    <SelectItem value="Life & Entertainment">
-                      Life & Entertainment
-                    </SelectItem>
-                    <SelectItem value="Communication, PC">
-                      Communication, PC
-                    </SelectItem>
-                    <SelectItem value="Financial expenses">
-                      Financial expenses
-                    </SelectItem>
-                    <SelectItem value="Investments">Investments</SelectItem>
-                    <SelectItem value="Income">Income</SelectItem>
-                    <SelectItem value="Others">Others</SelectItem>
-                  </SelectContent>
-                </Select>
+                <ChooseTheCategory />
               </div>
               <div className="w-full h-fit flex flex-row justify-between items-start gap-x-4">
                 <div className="w-full h-fit flex flex-col justify-start items-start gap-y-1">
