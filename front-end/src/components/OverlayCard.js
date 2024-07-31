@@ -25,15 +25,31 @@ import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 
 import { AddCategory } from "./OverlayAddCategory";
+import { Title } from "@radix-ui/react-dialog";
+import axios from "axios";
 
 export const OverlayCard = ({ open, width }) => {
   const [expense, setExpense] = useState(true);
   const [income, setIncome] = useState(true);
+  const [money, setMoney] = useState("");
+  const [time, setTime] = useState("");
 
   const handleColorChange = () => {
     setExpense(!expense);
   };
   console.log(handleColorChange);
+
+  const createRecord = async () => {
+    const newRecord = {
+      money,
+      time,
+    };
+
+    const response = await axios.post(
+      "http://localhost:3001/records",
+      newRecord
+    );
+  };
 
   return (
     <Dialog>
@@ -76,9 +92,12 @@ export const OverlayCard = ({ open, width }) => {
                 <div className="w-fit h-fit flex flex-row justify-center items-center gap-x-2">
                   <h6 className="text-[#9CA3AF] text-xl font-normal">T</h6>
                   <input
-                    type="Tugrug"
+                    value={money}
                     placeholder="000.00"
                     className="w-[80px] h-[28px] text-xl font-normal"
+                    onChange={(event) => {
+                      setMoney(event.target.value);
+                    }}
                   />
                 </div>
               </div>
@@ -95,7 +114,11 @@ export const OverlayCard = ({ open, width }) => {
                   <h6>Time</h6>
                   <Input
                     type="time"
+                    value={time}
                     className="w-full h-fit border-2 border-[#D1D5DB] rounded-[8px]"
+                    onChange={(event) => {
+                      setTime(event.target.value);
+                    }}
                   />
                 </div>
               </div>
@@ -103,6 +126,7 @@ export const OverlayCard = ({ open, width }) => {
                 className={`w-full ${
                   expense ? "bg-[#0166FF]" : "bg-[#16A34A]"
                 }`}
+                onClick={createRecord}
               >
                 Add Record
               </Button>

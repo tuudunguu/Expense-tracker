@@ -20,36 +20,36 @@ import {
 import { Item } from "@radix-ui/react-radio-group";
 
 const icons = [
-  { icon: FaHouseChimney },
-  { icon: FaBoxOpen },
-  { icon: GiBoombox },
-  { icon: FaParachuteBox },
-  { icon: GiBoxingGloveSurprise },
-  { icon: TbBoxMultiple7 },
-  { icon: SiScrapbox },
-  { icon: FaBridge },
-  { icon: SiHomebridge },
-  { icon: FaIcons },
-  { icon: FaHouseChimney },
-  { icon: FaBoxOpen },
-  { icon: GiBoombox },
-  { icon: FaParachuteBox },
-  { icon: GiBoxingGloveSurprise },
-  { icon: TbBoxMultiple7 },
-  { icon: SiScrapbox },
-  { icon: FaBridge },
-  { icon: SiHomebridge },
-  { icon: FaIcons },
-  { icon: FaHouseChimney },
-  { icon: FaBoxOpen },
-  { icon: GiBoombox },
-  { icon: FaParachuteBox },
-  { icon: GiBoxingGloveSurprise },
-  { icon: TbBoxMultiple7 },
-  { icon: SiScrapbox },
-  { icon: FaBridge },
-  { icon: SiHomebridge },
-  { icon: FaIcons },
+  { icon: FaHouseChimney, label: "FaHouseChimney" },
+  { icon: FaBoxOpen, label: "FaBoxOpen" },
+  { icon: GiBoombox, label: "GiBoombox" },
+  { icon: FaParachuteBox, label: "FaParachuteBox " },
+  { icon: GiBoxingGloveSurprise, label: "GiBoxingGloveSurprisy" },
+  { icon: TbBoxMultiple7, label: "TbBoxMultiple7" },
+  { icon: SiScrapbox, label: "SiScrapbox" },
+  { icon: FaBridge, label: "FaBridge" },
+  { icon: SiHomebridge, label: "SiHomebridge" },
+  { icon: FaIcons, label: "aIcons" },
+  { icon: FaHouseChimney, label: "FaHouseChimney" },
+  { icon: FaBoxOpen, label: "FaBoxOpen" },
+  { icon: GiBoombox, label: "GiBoombox" },
+  { icon: FaParachuteBox, label: "FaParachuteBox " },
+  { icon: GiBoxingGloveSurprise, label: "GiBoxingGloveSurprisy" },
+  { icon: TbBoxMultiple7, label: "TbBoxMultiple7" },
+  { icon: SiScrapbox, label: "SiScrapbox" },
+  { icon: FaBridge, label: "FaBridge" },
+  { icon: SiHomebridge, label: "SiHomebridge" },
+  { icon: FaIcons, label: "aIcons" },
+  { icon: FaHouseChimney, label: "FaHouseChimney" },
+  { icon: FaBoxOpen, label: "FaBoxOpen" },
+  { icon: GiBoombox, label: "GiBoombox" },
+  { icon: FaParachuteBox, label: "FaParachuteBox " },
+  { icon: GiBoxingGloveSurprise, label: "GiBoxingGloveSurprisy" },
+  { icon: TbBoxMultiple7, label: "TbBoxMultiple7" },
+  { icon: SiScrapbox, label: "SiScrapbox" },
+  { icon: FaBridge, label: "FaBridge" },
+  { icon: SiHomebridge, label: "SiHomebridge" },
+  { icon: FaIcons, label: "aIcons" },
 ];
 
 const colors = [
@@ -64,16 +64,25 @@ const colors = [
 ];
 
 export const IconSelecter = ({}) => {
-  const [selectedIconIndex, setSelectedIconIndex] = useState(0);
-  const [selectedColor, setSelectedColor] = useState(colors[0]);
-
-  const SelectedIcon = icons[selectedIconIndex].icon;
   return (
-    <Select className="w-[84px] h-[48px] border-2 border-[#D1D5D] rounded-[8px] flex flex-row justify-center items-center gap-x-1">
-      <SelectTrigger>
-        <SelectValue />
+    <Select>
+      <SelectTrigger className="w-[120px] border-2 border-[#D1D5DB]">
+        <SelectValue placeholder={<FaHouseChimney />} />
       </SelectTrigger>
-      <SelectContent className="h-fit  w-fit  flex flex-col justify-center gap-6 items-center"></SelectContent>
+      <SelectContent className="bg-white">
+        <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-5 justify-center">
+            {icons.map((item) => {
+              const Icon = item.icon;
+              return (
+                <SelectItem value={item.label}>
+                  <Icon />
+                </SelectItem>
+              );
+            })}
+          </div>
+        </div>
+      </SelectContent>
     </Select>
   );
 };

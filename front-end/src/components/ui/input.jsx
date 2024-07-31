@@ -10,9 +10,10 @@ import {
 
 import { cn } from "@/lib/utils"
 
-const Input = React.forwardRef(({ className, type, ...props }, ref) => {
+const Input = React.forwardRef(({ className, type, ...props  }, ref) => {
   return (
     (<input
+    
       type={type}
       className={cn(
         "flex h-6 w-full rounded-md  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground    disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none",

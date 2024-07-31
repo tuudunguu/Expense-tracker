@@ -97,7 +97,7 @@ export const Records = ({}) => {
               ))}
               <div className="flex flex-row justify-start items-center gap-x-2">
                 <IoMdAdd className="text-blue-600 h-5 w-5" />
-                <h6>Add Category</h6>
+                <AddCategory open="Add Category" />
               </div>
             </div>
           </div>
