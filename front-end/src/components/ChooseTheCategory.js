@@ -8,14 +8,31 @@ import {
 
 import { AddCategory } from "./OverlayAddCategory";
 
-export const ChooseTheCategory = () => {
+export const ChooseTheCategory = ({
+  categoryName,
+  setCategoryName,
+  categoryIcon,
+  setCategoryIcon,
+  createCategory,
+  isOpen,
+  setIsOpen,
+}) => {
   return (
     <Select>
       <SelectTrigger className="w-full h-12 border-2 border-[#D1D5DB]">
         <SelectValue placeholder="Find or choose category" />
       </SelectTrigger>
       <SelectContent>
-        <AddCategory open="Add Category" />
+        <AddCategory
+          open="Add Category"
+          createCategory={createCategory}
+          categoryName={categoryName}
+          setCategoryName={setCategoryName}
+          categoryIcon={categoryIcon}
+          setCategoryIcon={setCategoryIcon}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+        />
 
         <SelectItem value="lFood and Drink">Food and Drink</SelectItem>
         <SelectItem value="Shopping">Shopping</SelectItem>

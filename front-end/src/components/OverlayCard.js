@@ -28,7 +28,17 @@ import { AddCategory } from "./OverlayAddCategory";
 import { Title } from "@radix-ui/react-dialog";
 import axios from "axios";
 
-export const OverlayCard = ({ open, width }) => {
+export const OverlayCard = ({
+  open,
+  width,
+  categoryName,
+  setCategoryName,
+  categoryIcon,
+  setCategoryIcon,
+  createCategory,
+  isOpen,
+  setIsOpen,
+}) => {
   const [expense, setExpense] = useState(true);
   const [income, setIncome] = useState(true);
   const [money, setMoney] = useState("");
@@ -103,7 +113,15 @@ export const OverlayCard = ({ open, width }) => {
               </div>
               <div className="w-full h-fit flex flex-col justify-start items-start gap-y-1">
                 <h6>Category</h6>
-                <ChooseTheCategory />
+                <ChooseTheCategory
+                  createCategory={createCategory}
+                  categoryName={categoryName}
+                  setCategoryName={setCategoryName}
+                  categoryIcon={categoryIcon}
+                  setCategoryIcon={setCategoryIcon}
+                  isOpen={isOpen}
+                  setIsOpen={setIsOpen}
+                />
               </div>
               <div className="w-full h-fit flex flex-row justify-between items-start gap-x-4">
                 <div className="w-full h-fit flex flex-col justify-start items-start gap-y-1">

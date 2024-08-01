@@ -1,3 +1,4 @@
+// Records.js
 "use client";
 
 import { Container } from "./Container";
@@ -13,8 +14,9 @@ import { FaAngleRight } from "react-icons/fa";
 import { Checkbox } from "@/components/ui/checkbox";
 import { InfoCard } from "./Info-card";
 import { OverlayCard } from "./OverlayCard";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AddCategory } from "./OverlayAddCategory";
+import axios from "axios";
 
 import {
   Select,
@@ -24,45 +26,68 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const data = [
-  "Food and Drink",
-  "Shopping",
-  "Housing",
-  "Transportation",
-  "Vehicle",
-  "Life & Entertainment",
-  "Communication, PC",
-  "Financial expenses",
-  "Investments",
-  "Income",
-  "Others",
-];
-
 const cardData = [
   { title: "Lending & Renting", time: "12:01", number: "1000" },
-  { title: "Lending & Renting", time: "12:01", number: "1000" },
-  { title: "Lending & Renting", time: "12:01", number: "1000" },
-  { title: "Lending & Renting", time: "12:01", number: "1000" },
-  { title: "Lending & Renting", time: "12:01", number: "1000" },
-  { title: "Lending & Renting", time: "12:01", number: "1000" },
-  { title: "Lending & Renting", time: "12:01", number: "1000" },
-  { title: "Lending & Renting", time: "12:01", number: "1000" },
-  { title: "Lending & Renting", time: "12:01", number: "1000" },
-  { title: "Lending & Renting", time: "12:01", number: "1000" },
+  // ...other items
 ];
 
 export const Records = ({}) => {
   const [values, setValues] = useState([0, 1000]);
+  const [category, setCategory] = useState([]);
+  const [categoryName, setCategoryName] = useState("");
+  const [categoryIcon, setCategoryIcon] = useState("");
+  const [open, setOpen] = useState(true);
+
+  useEffect(() => {
+    const getData = async () => {
+      const response = await axios.get("http://localhost:3001/categories");
+      setCategory(response.data);
+    };
+    getData();
+  }, []);
 
   const handleSliderChange = (newValues) => {
     setValues(newValues);
   };
+
+  const createCategory = async () => {
+    try {
+      const newCategory = {
+        categoryName,
+        categoryIcon,
+      };
+
+      const response = await axios.post(
+        "http://localhost:3001/categories",
+        newCategory
+      );
+      setCategory([...category, response.data]);
+    } catch (error) {
+      console.error("Error creating category:", error);
+    }
+
+    setOpen(false);
+  };
+  const close = () => {
+    setOpen(false);
+  };
+
   return (
     <Container background="bg-[#F3F4F6]" height="h-[1080px]">
       <div className="w-full h-full flex flex-row justify-between items-center py-6 ">
         <div className="w-fit h-full px-4 py-6 flex flex-col justify-between items-start gap-y-6 bg-white rounded-xl">
           <h4>Records</h4>
-          <OverlayCard open="Add" width="w-full" />
+          <OverlayCard
+            open="Add"
+            width="w-full"
+            createCategory={createCategory}
+            categoryName={categoryName}
+            setCategoryName={setCategoryName}
+            categoryIcon={categoryIcon}
+            setCategoryIcon={setCategoryIcon}
+            isOpen={open}
+            setIsOpen={setOpen}
+          />
 
           <Input
             type="search"
@@ -81,23 +106,36 @@ export const Records = ({}) => {
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="option-two" id="option-two" />
-                <Label htmlFor="option-one">Income</Label>
+                <Label htmlFor="option-two">Income</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="option-three" id="option-three" />
-                <Label htmlFor="option-two">Expense</Label>
+                <Label htmlFor="option-three">Expense</Label>
               </div>
             </RadioGroup>
           </div>
-          <div className="w-fit h-fit flex flex-col justify-center items-start gap-y-4">
+          <div className="w-fit h-[520px] flex flex-col justify-between items-start gap-y-4">
             <h5>Category</h5>
-            <div className="w-fit h-fit flex-col justify-between items-center gap-y-4">
-              {data.map((item) => (
-                <Category key={item} content={item} />
-              ))}
-              <div className="flex flex-row justify-start items-center gap-x-2">
-                <IoMdAdd className="text-blue-600 h-5 w-5" />
-                <AddCategory open="Add Category" />
+            <div className="w-fit h-full flex-col justify-between items-center gap-y-4">
+              <div className="w-fit h-full flex flex-col justify-center">
+                <div className="w-fit h-[440px] overflow-y-scroll">
+                  {category.map((item) => (
+                    <Category key={item.id} content={item.categoryName} />
+                  ))}
+                </div>
+                <div className="flex flex-row justify-start items-center gap-x-2">
+                  <IoMdAdd className="text-blue-600 h-5 w-5" />
+                  <AddCategory
+                    open="Add Category"
+                    createCategory={createCategory}
+                    categoryName={categoryName}
+                    setCategoryName={setCategoryName}
+                    categoryIcon={categoryIcon}
+                    setCategoryIcon={setCategoryIcon}
+                    isOpen={open}
+                    setIsOpen={setOpen}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -188,7 +226,7 @@ export const Records = ({}) => {
                 </div>
               </div>
               <div className="w-full h-fit flex flex-col justify-center items-start gap-y-3">
-                <h5>this week</h5>
+                <h5>This week</h5>
                 <div className="w-full h-fit flex flex-col justify-center items-center gap-y-3">
                   {cardData.map((item) => (
                     <InfoCard
