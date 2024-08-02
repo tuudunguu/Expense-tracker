@@ -34,9 +34,35 @@ const cardData = [
 export const Records = ({}) => {
   const [values, setValues] = useState([0, 1000]);
   const [category, setCategory] = useState([]);
+  const [record, setRecord] = useState([]);
   const [categoryName, setCategoryName] = useState("");
   const [categoryIcon, setCategoryIcon] = useState("");
   const [open, setOpen] = useState(true);
+  const [money, setMoney] = useState("");
+  const [time, setTime] = useState("");
+  const [title, setTitle] = useState("");
+
+  useEffect(() => {
+    const getData = async () => {
+      const response = await axios.get("http://localhost:3001/records");
+      setRecord(response.data);
+    };
+    getData();
+  }, []);
+
+  const createRecord = async () => {
+    const newRecord = {
+      money,
+      time,
+      title,
+    };
+
+    const response = await axios.post(
+      "http://localhost:3001/records",
+      newRecord
+    );
+    setRecord([...record, response.data]);
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -68,6 +94,16 @@ export const Records = ({}) => {
 
     setOpen(false);
   };
+
+  const deleteCategory = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3001/categories/${id}`);
+      setCategory(category.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error("Error deleting category:", error);
+    }
+  };
+
   const close = () => {
     setOpen(false);
   };
@@ -87,6 +123,14 @@ export const Records = ({}) => {
             setCategoryIcon={setCategoryIcon}
             isOpen={open}
             setIsOpen={setOpen}
+            category={category}
+            createRecord={createRecord}
+            money={money}
+            time={time}
+            title={title}
+            setMoney={setMoney}
+            setTime={setTime}
+            setTitle={setTitle}
           />
 
           <Input
@@ -120,7 +164,11 @@ export const Records = ({}) => {
               <div className="w-fit h-full flex flex-col justify-center">
                 <div className="w-fit h-[440px] overflow-y-scroll">
                   {category.map((item) => (
-                    <Category key={item.id} content={item.categoryName} />
+                    <Category
+                      key={item.id}
+                      content={item.categoryName}
+                      onDelete={() => deleteCategory(item.id)}
+                    />
                   ))}
                 </div>
                 <div className="flex flex-row justify-start items-center gap-x-2">
@@ -202,51 +250,12 @@ export const Records = ({}) => {
               <div className="w-full h-fit flex flex-col justify-center items-start gap-y-3">
                 <h5>Today</h5>
                 <div className="w-full h-fit flex flex-col justify-center items-center gap-y-3">
-                  {cardData.map((item) => (
+                  {record.map((item) => (
                     <InfoCard
                       key={item.title}
                       title={item.title}
                       time={item.time}
-                      number={item.number}
-                    />
-                  ))}
-                </div>
-              </div>
-              <div className="w-full h-fit flex flex-col justify-center items-start gap-y-3">
-                <h5>Yesterday</h5>
-                <div className="w-full h-fit flex flex-col justify-center items-center gap-y-3">
-                  {cardData.map((item) => (
-                    <InfoCard
-                      key={item.title}
-                      title={item.title}
-                      time={item.time}
-                      number={item.number}
-                    />
-                  ))}
-                </div>
-              </div>
-              <div className="w-full h-fit flex flex-col justify-center items-start gap-y-3">
-                <h5>This week</h5>
-                <div className="w-full h-fit flex flex-col justify-center items-center gap-y-3">
-                  {cardData.map((item) => (
-                    <InfoCard
-                      key={item.title}
-                      title={item.title}
-                      time={item.time}
-                      number={item.number}
-                    />
-                  ))}
-                </div>
-              </div>
-              <div className="w-full h-fit flex flex-col justify-center items-start gap-y-3">
-                <h5>This month</h5>
-                <div className="w-full h-fit flex flex-col justify-center items-center gap-y-3">
-                  {cardData.map((item) => (
-                    <InfoCard
-                      key={item.title}
-                      title={item.title}
-                      time={item.time}
-                      number={item.number}
+                      number={item.money}
                     />
                   ))}
                 </div>

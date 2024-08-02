@@ -38,28 +38,23 @@ export const OverlayCard = ({
   createCategory,
   isOpen,
   setIsOpen,
+  category,
+  createRecord,
+  money,
+  time,
+  title,
+
+  setMoney,
+  setTime,
+  setTitle,
 }) => {
   const [expense, setExpense] = useState(true);
   const [income, setIncome] = useState(true);
-  const [money, setMoney] = useState("");
-  const [time, setTime] = useState("");
 
   const handleColorChange = () => {
     setExpense(!expense);
   };
   console.log(handleColorChange);
-
-  const createRecord = async () => {
-    const newRecord = {
-      money,
-      time,
-    };
-
-    const response = await axios.post(
-      "http://localhost:3001/records",
-      newRecord
-    );
-  };
 
   return (
     <Dialog>
@@ -121,6 +116,9 @@ export const OverlayCard = ({
                   setCategoryIcon={setCategoryIcon}
                   isOpen={isOpen}
                   setIsOpen={setIsOpen}
+                  category={category}
+                  setTitle={setTitle}
+                  title={title}
                 />
               </div>
               <div className="w-full h-fit flex flex-row justify-between items-start gap-x-4">

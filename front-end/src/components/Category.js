@@ -5,7 +5,7 @@ import { IoEye } from "react-icons/io5";
 import { IoEyeOff } from "react-icons/io5";
 import { MdOutlineNavigateNext } from "react-icons/md";
 
-export const Category = ({ content }) => {
+export const Category = ({ content, onDelete }) => {
   const [eye, setEye] = useState(true);
 
   const handleSwitch = () => {
@@ -18,7 +18,7 @@ export const Category = ({ content }) => {
 
         <h6>{content}</h6>
       </div>
-      <MdOutlineNavigateNext />
+      <MdOutlineNavigateNext onClick={onDelete} />
     </div>
   );
 };

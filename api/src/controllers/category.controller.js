@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const { v4: uuidv4 } = require("uuid");
 
 const getAllCategories = async (req, res) => {
   try {
@@ -34,7 +35,7 @@ const createCategory = async (req, res) => {
     const rawData = fs.readFileSync(filePath);
     const categories = JSON.parse(rawData);
 
-    const newCategory = req.body;
+    const newCategory = { id: uuidv4(), ...req.body };
     categories.push(newCategory);
 
     fs.writeFileSync(filePath, JSON.stringify(categories));
@@ -44,5 +45,30 @@ const createCategory = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+const deleteCategory = async (req, res) => {
+  try {
+    const filePath = path.join(__dirname, "..", "data", "categories.json");
+    console.log(`Deleting category from ${filePath}`);
 
-module.exports = { getAllCategories, createCategory };
+    if (!fs.existsSync(filePath)) {
+      console.error("File does not exist:", filePath);
+      return res.status(500).json({ error: "Categories file not found" });
+    }
+
+    const rawData = fs.readFileSync(filePath);
+    const categories = JSON.parse(rawData);
+
+    const categoryId = req.params.id;
+    const updatedCategories = categories.filter(
+      (category) => category.id !== categoryId
+    );
+
+    fs.writeFileSync(filePath, JSON.stringify(updatedCategories));
+    res.status(200).send({ message: "Category deleted successfully" });
+  } catch (error) {
+    console.error("Error in deleteCategory:", error);
+    res.status(500).json({ error: "Failed to delete category" });
+  }
+};
+
+module.exports = { getAllCategories, createCategory, deleteCategory };
