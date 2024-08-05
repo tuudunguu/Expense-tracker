@@ -117,10 +117,7 @@ export const ChooseTheCategory = ({
           const Icon = iconMap[item.categoryIcon];
           console.log(item.id);
           return (
-            <SelectItem
-              key={item.id}
-              value={`${item.categoryIcon},${item.categoryName}`}
-            >
+            <SelectItem key={item.id} value={`${item.categoryName}`}>
               <div className="flex flex-row justify-start items-center gap-x-3">
                 {Icon && <Icon className="w-6 h-6 " />}
 

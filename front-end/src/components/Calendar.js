@@ -21,8 +21,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export function DatePickerWithPresets() {
-  const [date, setDate] = React.useState();
+export function DatePickerWithPresets({ onValueChange }) {
+  const [date, setDate] = React.useState(null);
+
+  React.useEffect(() => {
+    if (date) {
+      onValueChange(date);
+    }
+  }, [date, onValueChange]);
 
   return (
     <Popover>
@@ -40,9 +46,10 @@ export function DatePickerWithPresets() {
       </PopoverTrigger>
       <PopoverContent className="flex w-auto flex-col space-y-2 p-2">
         <Select
-          onValueChange={(value) =>
-            setDate(addDays(new Date(), parseInt(value)))
-          }
+          onValueChange={(value) => {
+            const newDate = addDays(new Date(), parseInt(value));
+            setDate(newDate);
+          }}
         >
           <SelectTrigger>
             <SelectValue placeholder="Select" />

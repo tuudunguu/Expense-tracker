@@ -43,18 +43,20 @@ export const OverlayCard = ({
   money,
   time,
   title,
-
   setMoney,
   setTime,
   setTitle,
+  status,
+  setStatus,
+  setDate,
+  date,
 }) => {
   const [expense, setExpense] = useState(true);
-  const [income, setIncome] = useState(true);
 
   const handleColorChange = () => {
     setExpense(!expense);
+    console.log(expense);
   };
-  console.log(handleColorChange);
 
   return (
     <Dialog>
@@ -71,7 +73,10 @@ export const OverlayCard = ({
             <div className="w-full h-full flex flex-col justify-between items-center gap-y-5 flex-1">
               <div className="w-full h-fit flex flex-row justify-center items-center ">
                 <Button
-                  onClick={handleColorChange}
+                  onClick={() => {
+                    setStatus("expense");
+                    handleColorChange();
+                  }}
                   className={`w-[148px] h-[40px] px-3 rounded-[20px] ${
                     expense ? "bg-[#0166FF]" : "bg-[#F3F4F6]"
                   }`}
@@ -82,7 +87,10 @@ export const OverlayCard = ({
                 </Button>
 
                 <Button
-                  onClick={handleColorChange}
+                  onClick={() => {
+                    setStatus("income");
+                    handleColorChange();
+                  }}
                   className={`w-[148px] h-[40px] px-3 rounded-[20px] ${
                     expense ? "bg-[#F3F4F6]" : "bg-[#16A34A]"
                   }`}
@@ -124,7 +132,11 @@ export const OverlayCard = ({
               <div className="w-full h-fit flex flex-row justify-between items-start gap-x-4">
                 <div className="w-full h-fit flex flex-col justify-start items-start gap-y-1">
                   <h6>Date</h6>
-                  <DatePickerWithPresets />
+                  <DatePickerWithPresets
+                    onValueChange={(selectedDate) => {
+                      setDate(selectedDate);
+                    }}
+                  />
                 </div>
                 <div className="w-full h-fit flex flex-col justify-start items-start gap-y-1">
                   <h6>Time</h6>

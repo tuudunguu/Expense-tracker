@@ -1,1 +1,29 @@
-[{ "money": "20000", "time": "21:35", "title": "FaBeer" }]
+[
+  {
+    "id": "c2e661a7-5856-4da8-be34-8daaf0db8b9b",
+    "money": "55363",
+    "time": "23:19",
+    "title": "eed3",
+    "categoryIcon": "",
+    "status": "income",
+    "date": ""
+  },
+  {
+    "id": "c4f659ef-afc5-45d4-9f44-0cc57b997bad",
+    "money": "55363",
+    "time": "23:19",
+    "title": "bus",
+    "categoryIcon": "",
+    "status": "expense",
+    "date": ""
+  },
+  {
+    "id": "dea96825-62b2-4439-a1ee-e4a6a051f0de",
+    "money": "73773",
+    "time": "",
+    "title": "eed3",
+    "categoryIcon": "",
+    "status": "income",
+    "date": "2024-08-13T07:00:00.000Z"
+  }
+]

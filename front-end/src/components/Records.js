@@ -25,22 +25,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { setDate } from "date-fns";
 
-const cardData = [
-  { title: "Lending & Renting", time: "12:01", number: "1000" },
-  // ...other items
-];
-
-export const Records = ({}) => {
+export const Records = () => {
   const [values, setValues] = useState([0, 1000]);
   const [category, setCategory] = useState([]);
   const [record, setRecord] = useState([]);
   const [categoryName, setCategoryName] = useState("");
   const [categoryIcon, setCategoryIcon] = useState("");
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [money, setMoney] = useState("");
   const [time, setTime] = useState("");
   const [title, setTitle] = useState("");
+  const [status, setStatus] = useState("");
+  const [date, setDate] = useState("");
 
   useEffect(() => {
     const getData = async () => {
@@ -55,6 +53,9 @@ export const Records = ({}) => {
       money,
       time,
       title,
+      categoryIcon,
+      status,
+      date,
     };
 
     const response = await axios.post(
@@ -62,6 +63,10 @@ export const Records = ({}) => {
       newRecord
     );
     setRecord([...record, response.data]);
+  };
+  const deleteRecord = async (id) => {
+    await axios.delete(`http://localhost:3001/records/${id}`);
+    setRecord((prev) => prev.filter((item) => item.id !== id));
   };
 
   useEffect(() => {
@@ -77,41 +82,29 @@ export const Records = ({}) => {
   };
 
   const createCategory = async () => {
-    try {
-      const newCategory = {
-        categoryName,
-        categoryIcon,
-      };
+    const newCategory = {
+      categoryName,
+      categoryIcon,
+    };
 
-      const response = await axios.post(
-        "http://localhost:3001/categories",
-        newCategory
-      );
-      setCategory([...category, response.data]);
-    } catch (error) {
-      console.error("Error creating category:", error);
-    }
+    const response = await axios.post(
+      "http://localhost:3001/categories",
+      newCategory
+    );
+    setCategory([...category, response.data]);
 
     setOpen(false);
   };
 
   const deleteCategory = async (id) => {
-    try {
-      await axios.delete(`http://localhost:3001/categories/${id}`);
-      setCategory(category.filter((item) => item.id !== id));
-    } catch (error) {
-      console.error("Error deleting category:", error);
-    }
-  };
-
-  const close = () => {
-    setOpen(false);
+    await axios.delete(`http://localhost:3001/categories/${id}`);
+    setCategory((prev) => prev.filter((item) => item.id !== id));
   };
 
   return (
     <Container background="bg-[#F3F4F6]" height="h-[1080px]">
       <div className="w-full h-full flex flex-row justify-between items-center py-6 ">
-        <div className="w-fit h-full px-4 py-6 flex flex-col justify-between items-start gap-y-6 bg-white rounded-xl">
+        <div className="min-w-[282px] h-full px-4 py-6 flex flex-col justify-between items-start gap-y-6 bg-white rounded-xl">
           <h4>Records</h4>
           <OverlayCard
             open="Add"
@@ -131,6 +124,10 @@ export const Records = ({}) => {
             setMoney={setMoney}
             setTime={setTime}
             setTitle={setTitle}
+            status={status}
+            setStatus={setStatus}
+            date={date}
+            setDate={setDate}
           />
 
           <Input
@@ -250,12 +247,14 @@ export const Records = ({}) => {
               <div className="w-full h-fit flex flex-col justify-center items-start gap-y-3">
                 <h5>Today</h5>
                 <div className="w-full h-fit flex flex-col justify-center items-center gap-y-3">
-                  {record.map((item) => (
+                  {record.map((item, index) => (
                     <InfoCard
-                      key={item.title}
+                      key={item.title + index}
                       title={item.title}
                       time={item.time}
                       number={item.money}
+                      icon={item.categoryIcon}
+                      onDelete={() => deleteRecord(item.id)}
                     />
                   ))}
                 </div>
