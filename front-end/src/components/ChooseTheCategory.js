@@ -90,6 +90,8 @@ export const ChooseTheCategory = ({
   category,
   setTitle,
   title,
+  setCategoryIconSelect,
+  categoryIconSelect,
 }) => {
   return (
     <Select
@@ -113,11 +115,13 @@ export const ChooseTheCategory = ({
           setIsOpen={setIsOpen}
         />
 
-        {category.map((item) => {
+        {category?.map((item) => {
           const Icon = iconMap[item.categoryIcon];
-          console.log(item.id);
           return (
-            <SelectItem key={item.id} value={`${item.categoryName}`}>
+            <SelectItem
+              key={item.id}
+              value={`${item.categoryName}, ${item.categoryIcon}`}
+            >
               <div className="flex flex-row justify-start items-center gap-x-3">
                 {Icon && <Icon className="w-6 h-6 " />}
 

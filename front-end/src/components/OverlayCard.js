@@ -50,6 +50,8 @@ export const OverlayCard = ({
   setStatus,
   setDate,
   date,
+  categoryIconSelect,
+  setCategoryIconSelect,
 }) => {
   const [expense, setExpense] = useState(true);
 
@@ -57,6 +59,7 @@ export const OverlayCard = ({
     setExpense(!expense);
     console.log(expense);
   };
+  console.log(status);
 
   return (
     <Dialog>
@@ -75,13 +78,17 @@ export const OverlayCard = ({
                 <Button
                   onClick={() => {
                     setStatus("expense");
-                    handleColorChange();
+                    // handleColorChange();
                   }}
-                  className={`w-[148px] h-[40px] px-3 rounded-[20px] ${
-                    expense ? "bg-[#0166FF]" : "bg-[#F3F4F6]"
+                  className={`w-[148px] h-[40px] px-3 rounded-[20px] bg-[#0166FF] ${
+                    status === "expense" ? "bg-[#0166FF]" : "bg-[#F3F4F6]"
                   }`}
                 >
-                  <h6 className={` ${expense ? "text-white" : "text-black"}`}>
+                  <h6
+                    className={` ${
+                      status === "expense" ? "text-white" : "text-black"
+                    }`}
+                  >
                     Expense
                   </h6>
                 </Button>
@@ -89,13 +96,17 @@ export const OverlayCard = ({
                 <Button
                   onClick={() => {
                     setStatus("income");
-                    handleColorChange();
+                    // handleColorChange();
                   }}
                   className={`w-[148px] h-[40px] px-3 rounded-[20px] ${
-                    expense ? "bg-[#F3F4F6]" : "bg-[#16A34A]"
+                    status === "income" ? "bg-[#16A34A]" : "bg-[#F3F4F6]"
                   }`}
                 >
-                  <h6 className={` ${expense ? "text-black" : "text-white"}`}>
+                  <h6
+                    className={` ${
+                      status === "income" ? "text-black" : "text-white"
+                    }`}
+                  >
                     Income
                   </h6>
                 </Button>
@@ -127,6 +138,8 @@ export const OverlayCard = ({
                   category={category}
                   setTitle={setTitle}
                   title={title}
+                  setCategoryIconSelect={setCategoryIconSelect}
+                  categoryIconSelect={categoryIconSelect}
                 />
               </div>
               <div className="w-full h-fit flex flex-row justify-between items-start gap-x-4">

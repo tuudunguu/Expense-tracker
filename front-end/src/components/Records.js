@@ -33,6 +33,7 @@ export const Records = () => {
   const [record, setRecord] = useState([]);
   const [categoryName, setCategoryName] = useState("");
   const [categoryIcon, setCategoryIcon] = useState("");
+  const [categoryIconSelect, setCategoryIconSelect] = useState("");
   const [open, setOpen] = useState(false);
   const [money, setMoney] = useState("");
   const [time, setTime] = useState("");
@@ -48,12 +49,26 @@ export const Records = () => {
     getData();
   }, []);
 
+  const object = record;
+
+  const TotalMoney = (arr) => {
+    let sum = 0;
+    for (let i = 0; i < arr.length; i++) {
+      const amount = parseFloat(arr[i].money);
+      if (arr[i].status === "expense") {
+        sum -= amount;
+      } else if (arr[i].status === "income") {
+        sum += amount;
+      }
+    }
+    return sum;
+  };
+
   const createRecord = async () => {
     const newRecord = {
       money,
       time,
       title,
-      categoryIcon,
       status,
       date,
     };
@@ -128,6 +143,8 @@ export const Records = () => {
             setStatus={setStatus}
             date={date}
             setDate={setDate}
+            setCategoryIconSelect={setCategoryIconSelect}
+            categoryIconSelect={categoryIconSelect}
           />
 
           <Input
@@ -242,7 +259,13 @@ export const Records = () => {
                   <h6>Select All</h6>
                 </div>
 
-                <h5 className="text-[#94A3B8]">- 35500</h5>
+                <h5
+                  className={`${
+                    TotalMoney(object) < 0 ? "text-red-700" : "text-green-700"
+                  }`}
+                >
+                  {TotalMoney(object)}
+                </h5>
               </div>
               <div className="w-full h-fit flex flex-col justify-center items-start gap-y-3">
                 <h5>Today</h5>
@@ -255,6 +278,7 @@ export const Records = () => {
                       number={item.money}
                       icon={item.categoryIcon}
                       onDelete={() => deleteRecord(item.id)}
+                      status={item.status}
                     />
                   ))}
                 </div>
