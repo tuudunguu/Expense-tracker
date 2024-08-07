@@ -90,8 +90,6 @@ export const ChooseTheCategory = ({
   category,
   setTitle,
   title,
-  setCategoryIconSelect,
-  categoryIconSelect,
 }) => {
   return (
     <Select

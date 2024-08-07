@@ -1,6 +1,7 @@
-// Records.js
 "use client";
 
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Container } from "./Container";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -9,14 +10,11 @@ import { Label } from "./ui/label";
 import { Category } from "./Category";
 import { IoMdAdd } from "react-icons/io";
 import { Slider } from "@/components/ui/slider";
-import { FaAngleLeft } from "react-icons/fa";
-import { FaAngleRight } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { Checkbox } from "@/components/ui/checkbox";
 import { InfoCard } from "./Info-card";
 import { OverlayCard } from "./OverlayCard";
-import React, { useState, useEffect } from "react";
 import { AddCategory } from "./OverlayAddCategory";
-import axios from "axios";
 
 import {
   Select,
@@ -25,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { setDate } from "date-fns";
+import { parseISO, isSameDay, subDays, subWeeks, subMonths } from "date-fns";
 
 export const Records = () => {
   const [values, setValues] = useState([0, 1000]);
@@ -40,6 +38,7 @@ export const Records = () => {
   const [title, setTitle] = useState("");
   const [status, setStatus] = useState("");
   const [date, setDate] = useState("");
+  const [statusChoose, setStatusChoose] = useState("");
 
   useEffect(() => {
     const getData = async () => {
@@ -49,36 +48,38 @@ export const Records = () => {
     getData();
   }, []);
 
-  const object = record;
-
   const TotalMoney = (arr) => {
     let sum = 0;
-    for (let i = 0; i < arr.length; i++) {
-      const amount = parseFloat(arr[i].money);
-      if (arr[i].status === "expense") {
+    arr.forEach((item) => {
+      const amount = parseFloat(item.money);
+      if (item.status === "expense") {
         sum -= amount;
-      } else if (arr[i].status === "income") {
+      } else if (item.status === "income") {
         sum += amount;
       }
-    }
+    });
     return sum;
   };
 
   const createRecord = async () => {
-    const newRecord = {
-      money,
-      time,
-      title,
-      status,
-      date,
-    };
+    if (!money || !time || !title || !status || !date) {
+      alert("Please fill in all fields.");
+      return;
+    }
 
-    const response = await axios.post(
-      "http://localhost:3001/records",
-      newRecord
-    );
-    setRecord([...record, response.data]);
+    const newRecord = { money, time, title, status, date };
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/records",
+        newRecord
+      );
+      setRecord([...record, response.data]);
+    } catch (error) {
+      console.error("Error creating record:", error);
+    }
   };
+
   const deleteRecord = async (id) => {
     await axios.delete(`http://localhost:3001/records/${id}`);
     setRecord((prev) => prev.filter((item) => item.id !== id));
@@ -115,6 +116,57 @@ export const Records = () => {
     await axios.delete(`http://localhost:3001/categories/${id}`);
     setCategory((prev) => prev.filter((item) => item.id !== id));
   };
+
+  const categorizeRecords = (records) => {
+    const today = new Date();
+    const yesterday = subDays(today, 1);
+    const lastWeek = subWeeks(today, 1);
+    const lastMonth = subMonths(today, 1);
+
+    const todayRecords = [];
+    const yesterdayRecords = [];
+    const lastWeekRecords = [];
+    const lastMonthRecords = [];
+
+    records.forEach((record) => {
+      const recordDate = parseISO(record.date);
+
+      if (isSameDay(recordDate, today)) {
+        todayRecords.push(record);
+      } else if (isSameDay(recordDate, yesterday)) {
+        yesterdayRecords.push(record);
+      } else if (recordDate >= lastWeek) {
+        lastWeekRecords.push(record);
+      } else if (recordDate >= lastMonth) {
+        lastMonthRecords.push(record);
+      }
+    });
+
+    return {
+      todayRecords,
+      yesterdayRecords,
+      lastWeekRecords,
+      lastMonthRecords,
+    };
+  };
+
+  const statuses = ["All", "Income", "Expense"];
+
+  const selectStatus = (status) => {
+    switch (status) {
+      case "Income":
+        return record.filter((item) => item.status === "income");
+      case "Expense":
+        return record.filter((item) => item.status === "expense");
+      case "All":
+      default:
+        return record;
+    }
+  };
+
+  const filteredRecordsByStatus = selectStatus(statusChoose);
+  const { todayRecords, yesterdayRecords, lastWeekRecords, lastMonthRecords } =
+    categorizeRecords(filteredRecordsByStatus);
 
   return (
     <Container background="bg-[#F3F4F6]" height="h-[1080px]">
@@ -157,19 +209,17 @@ export const Records = () => {
             <RadioGroup
               defaultValue="default"
               className="flex flex-col ml-4 gap-y-3"
+              value={statusChoose}
+              onValueChange={(event) => {
+                setStatusChoose(event);
+              }}
             >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="option-one" id="option-one" />
-                <Label htmlFor="option-one">All</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="option-two" id="option-two" />
-                <Label htmlFor="option-two">Income</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="option-three" id="option-three" />
-                <Label htmlFor="option-three">Expense</Label>
-              </div>
+              {statuses.map((item) => (
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value={`${item}`} id={`${item}`} />
+                  <Label htmlFor={`${item}`}>{item}</Label>
+                </div>
+              ))}
             </RadioGroup>
           </div>
           <div className="w-fit h-[520px] flex flex-col justify-between items-start gap-y-4">
@@ -261,28 +311,84 @@ export const Records = () => {
 
                 <h5
                   className={`${
-                    TotalMoney(object) < 0 ? "text-red-700" : "text-green-700"
+                    TotalMoney(record) < 0 ? "text-red-700" : "text-green-700"
                   }`}
                 >
-                  {TotalMoney(object)}
+                  {TotalMoney(record)}
                 </h5>
               </div>
-              <div className="w-full h-fit flex flex-col justify-center items-start gap-y-3">
-                <h5>Today</h5>
-                <div className="w-full h-fit flex flex-col justify-center items-center gap-y-3">
-                  {record.map((item, index) => (
-                    <InfoCard
-                      key={item.title + index}
-                      title={item.title}
-                      time={item.time}
-                      number={item.money}
-                      icon={item.categoryIcon}
-                      onDelete={() => deleteRecord(item.id)}
-                      status={item.status}
-                    />
-                  ))}
+              {todayRecords.length > 0 && (
+                <div className="w-full h-fit flex flex-col justify-center items-start gap-y-3">
+                  <h5>Today</h5>
+                  <div className="w-full h-fit flex flex-col justify-center items-center gap-y-3">
+                    {todayRecords.map((item, index) => (
+                      <InfoCard
+                        key={item.title + index}
+                        title={item.title}
+                        time={item.time}
+                        number={item.money}
+                        icon={item.categoryIcon}
+                        onDelete={() => deleteRecord(item.id)}
+                        status={item.status}
+                      />
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
+              {yesterdayRecords.length > 0 && (
+                <div className="w-full h-fit flex flex-col justify-center items-start gap-y-3">
+                  <h5>Yesterday</h5>
+                  <div className="w-full h-fit flex flex-col justify-center items-center gap-y-3">
+                    {yesterdayRecords.map((item, index) => (
+                      <InfoCard
+                        key={item.title + index}
+                        title={item.title}
+                        time={item.time}
+                        number={item.money}
+                        icon={item.categoryIcon}
+                        onDelete={() => deleteRecord(item.id)}
+                        status={item.status}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+              {lastWeekRecords.length > 0 && (
+                <div className="w-full h-fit flex flex-col justify-center items-start gap-y-3">
+                  <h5>Last Week</h5>
+                  <div className="w-full h-fit flex flex-col justify-center items-center gap-y-3">
+                    {lastWeekRecords.map((item, index) => (
+                      <InfoCard
+                        key={item.title + index}
+                        title={item.title}
+                        time={item.time}
+                        number={item.money}
+                        icon={item.categoryIcon}
+                        onDelete={() => deleteRecord(item.id)}
+                        status={item.status}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+              {lastMonthRecords.length > 0 && (
+                <div className="w-full h-fit flex flex-col justify-center items-start gap-y-3">
+                  <h5>Last Month</h5>
+                  <div className="w-full h-fit flex flex-col justify-center items-center gap-y-3">
+                    {lastMonthRecords.map((item, index) => (
+                      <InfoCard
+                        key={item.title + index}
+                        title={item.title}
+                        time={item.time}
+                        number={item.money}
+                        icon={item.categoryIcon}
+                        onDelete={() => deleteRecord(item.id)}
+                        status={item.status}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

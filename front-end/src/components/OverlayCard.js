@@ -50,8 +50,6 @@ export const OverlayCard = ({
   setStatus,
   setDate,
   date,
-  categoryIconSelect,
-  setCategoryIconSelect,
 }) => {
   const [expense, setExpense] = useState(true);
 
@@ -138,8 +136,6 @@ export const OverlayCard = ({
                   category={category}
                   setTitle={setTitle}
                   title={title}
-                  setCategoryIconSelect={setCategoryIconSelect}
-                  categoryIconSelect={categoryIconSelect}
                 />
               </div>
               <div className="w-full h-fit flex flex-row justify-between items-start gap-x-4">

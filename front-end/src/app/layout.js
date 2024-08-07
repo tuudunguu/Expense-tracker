@@ -1,5 +1,8 @@
+"use context";
+
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { CategoryContextProvider } from "@/components/context/ChooseTheCategorycontext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -11,7 +14,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <CategoryContextProvider>
+        <body className={inter.className}>{children}</body>
+      </CategoryContextProvider>
     </html>
   );
 }
