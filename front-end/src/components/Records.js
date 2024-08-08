@@ -39,6 +39,13 @@ export const Records = () => {
   const [status, setStatus] = useState("");
   const [date, setDate] = useState("");
   const [statusChoose, setStatusChoose] = useState("");
+  const [categoryChoose, setCategoryChoose] = useState("");
+
+  const handleCategoryChoose = (category) => {
+    setCategoryChoose((prev) => (prev === category ? "" : category));
+  };
+
+  console.log(categoryChoose);
 
   useEffect(() => {
     const getData = async () => {
@@ -163,10 +170,17 @@ export const Records = () => {
         return record;
     }
   };
+  const selectCategory = (records) => {
+    if (!categoryChoose) return records;
+    return records.filter((item) => item.title.includes(categoryChoose));
+  };
 
   const filteredRecordsByStatus = selectStatus(statusChoose);
+
+  const filteredRecordsByCategory = selectCategory(filteredRecordsByStatus);
+
   const { todayRecords, yesterdayRecords, lastWeekRecords, lastMonthRecords } =
-    categorizeRecords(filteredRecordsByStatus);
+    categorizeRecords(filteredRecordsByCategory);
 
   return (
     <Container background="bg-[#F3F4F6]" height="h-[1080px]">
@@ -232,6 +246,7 @@ export const Records = () => {
                       key={item.id}
                       content={item.categoryName}
                       onDelete={() => deleteCategory(item.id)}
+                      onClick={() => handleCategoryChoose(item.categoryName)}
                     />
                   ))}
                 </div>
