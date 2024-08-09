@@ -24,7 +24,9 @@ export const Navbar = ({ background, children }) => {
       <div className="w-full h-fit py-4 flex flex-row justify-between items-center">
         <div className="w-fit h-fit flex flex-row justify-center items-center gap-x-6">
           <img src="/pictures/Vector.png" className="w-[28px] h-[28px]" />
-          <h6>Dashboard</h6>
+          <Link href="/Dashboard">
+            <h6>Dashboard</h6>
+          </Link>
           <h5>Records</h5>
         </div>
         <div className="w-fit h-fit flex flex-row justify-center items-center gap-x-6">
