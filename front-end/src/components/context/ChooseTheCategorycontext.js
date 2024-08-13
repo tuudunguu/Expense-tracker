@@ -9,11 +9,21 @@ export const CategoryContextProvider = ({ children }) => {
   const [category, setCategory] = useState([]);
   const [categoryName, setCategoryName] = useState("");
   const [categoryIcon, setCategoryIcon] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const getData = async () => {
-      const response = await axios.get("http://localhost:3001/categories");
-      setCategory(response.data);
+      setLoading(true);
+      try {
+        const response = await axios.get("http://localhost:3001/categories");
+        setCategory(response.data);
+      } catch (error) {
+        setError("Failed to load categories");
+        console.error("Error fetching categories:", error);
+      } finally {
+        setLoading(false);
+      }
     };
     getData();
   }, []);
@@ -24,16 +34,35 @@ export const CategoryContextProvider = ({ children }) => {
       categoryIcon,
     };
 
-    const response = await axios.post(
-      "http://localhost:3001/categories",
-      newCategory
-    );
-    setCategory([...category, response.data]);
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        "http://localhost:3001/categories",
+        newCategory
+      );
+      setCategory([...category, response.data]);
+      // Optionally reset input fields after creation
+      setCategoryName("");
+      setCategoryIcon("");
+    } catch (error) {
+      setError("Failed to create category");
+      console.error("Error creating category:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const deleteCategory = async (id) => {
-    await axios.delete(`http://localhost:3001/categories/${id}`);
-    setCategory((prev) => prev.filter((item) => item.id !== id));
+    try {
+      setLoading(true);
+      await axios.delete(`http://localhost:3001/categories/${id}`);
+      setCategory((prev) => prev.filter((item) => item.id !== id));
+    } catch (error) {
+      setError("Failed to delete category");
+      console.error("Error deleting category:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -46,6 +75,8 @@ export const CategoryContextProvider = ({ children }) => {
         setCategoryIcon,
         category,
         deleteCategory,
+        loading,
+        error,
       }}
     >
       {children}

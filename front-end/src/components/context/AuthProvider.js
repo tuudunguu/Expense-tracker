@@ -15,13 +15,17 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await api.post("/auth/Log-in", { email, password });
+      const response = await api.post("/auth/login", { email, password });
+      const token = response.data.token;
+
       toast.success(response.data.message);
       setIsLoggedIn(true);
-      localStorage.setItem("token", "token");
+      localStorage.setItem("token", token); // Store the actual token
       router.push("/");
     } catch (error) {
-      toast.error(error.response.data.message);
+      const errorMessage =
+        error.response?.data?.message || "Something went wrong!";
+      toast.error(errorMessage);
     }
   };
 

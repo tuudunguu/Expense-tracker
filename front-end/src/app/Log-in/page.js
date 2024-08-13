@@ -4,7 +4,14 @@ import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
+import { useAuth } from "@/components/context/AuthProvider";
+import { useState } from "react";
+
 export default function Home() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { login } = useAuth();
   return (
     <Container background="bg-[#F3F4F6] " height="h-screen ">
       <div className="w-full h-full flex flex-row bg-white">
@@ -23,15 +30,24 @@ export default function Home() {
                 type="email"
                 placeholder="Email"
                 className="bg-[#F3F4F6] rounded-[8px] border-2 border-[#D1D5DB] h-12"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
               />
               <Input
                 type="password"
                 placeholder="Password"
                 className="bg-[#F3F4F6] rounded-[8px] border-2 border-[#D1D5DB] h-12"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
               />
               <Button
                 variant="outline"
                 className="w-full rounded-2xl bg-[#0166FF]"
+                onClick={() => login(email, password)}
               >
                 <h3 className="text-xl font-normal text-white">Log in</h3>
               </Button>
