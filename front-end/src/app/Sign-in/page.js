@@ -3,8 +3,16 @@ import { Container } from "@/components/Container";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/components/context/AuthProvider";
+import { useState } from "react";
 
 export default function Home() {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { register } = useAuth();
+
   return (
     <Container background="bg-[#F3F4F6] " height="h-screen ">
       <div className="w-full h-full flex flex-row bg-white">
@@ -23,33 +31,44 @@ export default function Home() {
                 type="name"
                 placeholder="Name"
                 className="bg-[#F3F4F6] rounded-[8px] border-2 border-[#D1D5DB] h-12"
+                value={username}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                }}
               />
               <Input
                 type="Email"
                 placeholder="Email"
                 className="bg-[#F3F4F6] rounded-[8px] border-2 border-[#D1D5DB] h-12"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
               />
               <Input
                 type="password"
-                placeholder="REpassword"
+                placeholder="password"
                 className="bg-[#F3F4F6] rounded-[8px] border-2 border-[#D1D5DB] h-12"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
               />
-              <Input
+              {/* <Input
                 type="repassword"
                 placeholder="REpassword"
                 className="bg-[#F3F4F6] rounded-[8px] border-2 border-[#D1D5DB] h-12"
-              />
-              <Link href="/Loading">
-                <Button
-                  variant="outline"
-                  className="w-full rounded-2xl bg-[#0166FF]"
-                >
-                  <h3 className="text-xl font-normal text-white">Sign up</h3>
-                </Button>
-              </Link>
+              /> */}
+              <Button
+                variant="outline"
+                className="w-full rounded-2xl bg-[#0166FF]"
+                onClick={() => register(username, email, password)}
+              >
+                <h3 className="text-xl font-normal text-white">Sign up</h3>
+              </Button>
             </div>
             <div className="w-full flex flex-row justify-center items-center gap-x-2">
-              <h6>Don’t have account?</h6>
+              <h6>Already have account?</h6>
               <Link href="/Log-in">
                 <h6 className="text-[#0166FF]">Log in</h6>
               </Link>
