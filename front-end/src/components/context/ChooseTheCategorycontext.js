@@ -11,12 +11,17 @@ export const CategoryContextProvider = ({ children }) => {
   const [categoryIcon, setCategoryIcon] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const Authorization = localStorage.getItem("token");
 
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get("http://localhost:3001/categories");
+        const response = await axios.get("http://localhost:3001/categories", {
+          headers: {
+            Authorization: `Bearer ${Authorization}`,
+          },
+        });
         setCategory(response.data);
       } catch (error) {
         setError("Failed to load categories");

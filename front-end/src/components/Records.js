@@ -40,6 +40,7 @@ export const Records = () => {
   const [date, setDate] = useState("");
   const [statusChoose, setStatusChoose] = useState("");
   const [categoryChoose, setCategoryChoose] = useState("");
+  const Authorization = localStorage.getItem("token");
 
   const handleCategoryChoose = (category) => {
     setCategoryChoose((prev) => (prev === category ? "" : category));
@@ -49,7 +50,11 @@ export const Records = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const response = await axios.get("http://localhost:3001/records");
+      const response = await axios.get("http://localhost:3001/records", {
+        headers: {
+          Authorization: `Bearer ${Authorization}`,
+        },
+      });
       setRecord(response.data);
     };
     getData();
@@ -94,7 +99,11 @@ export const Records = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const response = await axios.get("http://localhost:3001/categories");
+      const response = await axios.get("http://localhost:3001/categories", {
+        headers: {
+          Authorization: `Bearer ${Authorization}`,
+        },
+      });
       setCategory(response.data);
     };
     getData();

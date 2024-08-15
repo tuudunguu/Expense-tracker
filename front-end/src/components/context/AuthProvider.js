@@ -29,7 +29,6 @@ export const AuthProvider = ({ children }) => {
   // It initializes two pieces of state: `user` (to store the authenticated user) and `isReady` (to indicate if the auth process is ready).
 
   const login = async (email, password) => {
-    console.log(email);
     try {
       const res = await api.post("/auth/login", { email, password });
       // Sends a POST request to the `/auth/login` endpoint with the email and password.

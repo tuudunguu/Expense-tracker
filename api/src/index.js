@@ -1,5 +1,7 @@
 const express = require("express");
 const cors = require("cors");
+require("dotenv").config();
+
 const { accountRouter } = require("./routes/account.route");
 const { recordRouter } = require("./routes/record.route");
 const { categoryRouter } = require("./routes/category.route");
