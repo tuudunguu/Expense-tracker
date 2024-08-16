@@ -1,11 +1,19 @@
 // Import necessary functions from drizzle-orm/pg-core
-import { integer, pgTable, serial, varchar, pgEnum } from "drizzle-orm/pg-core";
+const {
+  integer,
+  pgTable,
+  serial,
+  varchar,
+  pgEnum,
+  date,
+  time,
+} = require("drizzle-orm/pg-core");
 
 // Define the enum
-export const recordTypeEnum = pgEnum("recordType", ["INCOME", "EXPENSE"]);
+const recordTypeEnum = pgEnum("recordType", ["Income", "Expense"]);
 
 // Define the users table
-export const users = pgTable("users", {
+const users = pgTable("users", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 256 }),
   email: varchar("email", { length: 256 }),
@@ -13,16 +21,30 @@ export const users = pgTable("users", {
 });
 
 // Define the records table
-export const records = pgTable("records", {
+const records = pgTable("records", {
   id: serial("id").primaryKey(),
   amount: integer("amount"),
   type: recordTypeEnum("type"),
+  date: date("date"),
+  time: time("time"),
+  payee: varchar("payee"),
+  note: varchar("note", { length: 256 }),
+  category: varchar("category").references(() => category.id),
   userId: integer("userId").references(() => users.id),
 });
 
 // Define the category table
-export const category = pgTable("category", {
+const category = pgTable("category", {
   id: serial("id").primaryKey(),
-  name: varchar("name", { length: 256 }),
+  categoryIcon: varchar("categoryIcon", { length: 256 }),
+  categoryName: varchar("categoryName", { length: 256 }),
   userId: integer("userId").references(() => users.id),
 });
+
+// Export the modules
+module.exports = {
+  recordTypeEnum,
+  users,
+  records,
+  category,
+};

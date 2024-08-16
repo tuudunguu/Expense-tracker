@@ -3,23 +3,23 @@ const path = require("path");
 const { v4: uuidv4 } = require("uuid");
 
 const getAllCategories = async (req, res) => {
-  const filePath = path.join(__dirname, "..", "data", "categories.json");
-
-  const rawData = fs.readFileSync(filePath);
-  const categories = JSON.parse(rawData);
+  const users = await db.query.users.findMany({
+    with: {
+      posts: true,
+    },
+  });
 
   res.json(categories);
 };
 
 const createCategory = async (req, res) => {
-  const filePath = path.join(__dirname, "..", "data", "categories.json");
-  const rawData = fs.readFileSync(filePath);
-  const categories = JSON.parse(rawData);
+  const { id, categoryIcon, categoryName } = req.body;
 
-  const newCategory = { id: uuidv4(), ...req.body };
-  categories.push(newCategory);
+  const user = await db
+    .insert(users)
+    .values({ id, categoryIcon, categoryName })
+    .returning();
 
-  fs.writeFileSync(filePath, JSON.stringify(categories));
   res.json(newCategory);
 };
 const deleteCategory = async (req, res) => {

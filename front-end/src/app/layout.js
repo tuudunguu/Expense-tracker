@@ -20,7 +20,6 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <CategoryContextProvider>
         <body className={inter.className}>
-          {" "}
           <AuthProvider>{children}</AuthProvider>
           <ToastContainer />
         </body>
