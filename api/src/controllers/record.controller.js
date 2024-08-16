@@ -3,6 +3,9 @@ const path = require("path");
 const { v4: uuidv4 } = require("uuid");
 
 const getAllRecords = async (req, res) => {
+  // const posts = await db.query.posts.findMany();
+
+  // res.json(posts);
   const filePath = path.join(__dirname, "..", "data", "records.json");
   const rawData = fs.readFileSync(filePath);
   const records = JSON.parse(rawData);
@@ -11,6 +14,14 @@ const getAllRecords = async (req, res) => {
 };
 
 const createRecord = async (req, res) => {
+  // const { title, content, userId } = req.body;
+
+  // const post = await db
+  //   .insert(posts)
+  //   .values({ title, content, userId })
+  //   .returning();
+
+  // res.json(post);
   const filePath = path.join(__dirname, "..", "data", "records.json");
 
   const rawData = fs.readFileSync(filePath);
