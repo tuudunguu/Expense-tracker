@@ -8,7 +8,6 @@ const { categoryRouter } = require("./routes/category.route");
 const { authRouter } = require("./routes/auth.route");
 const { authMiddleware } = require("./middlewares/auth.middleware");
 const { userRouter } = require("./routes/user.route");
-const { usersRouter } = require("./routes/users.route");
 
 const app = express();
 
@@ -21,7 +20,6 @@ app.use("/records", recordRouter);
 app.use("/categories", categoryRouter);
 app.use("/auth", authRouter);
 app.use("/users", userRouter);
-app.use("/users1", usersRouter);
 
 app.listen(3001, () => {
   console.log("Server is running on port 3001");

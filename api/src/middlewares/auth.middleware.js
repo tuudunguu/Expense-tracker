@@ -11,6 +11,7 @@ const authMiddleware = (req, res, next) => {
 
   // Split the 'Authorization' header to extract the token, assuming it's in the format "Bearer <token>"
   const token = auth?.split(" ")[1];
+  console.log(token);
 
   // If no token is found, return a 401 Unauthorized response with a JSON error message "Нэвтрэнэ үү!" ("Please log in!")
   if (!token) return res.status(401).json({ error: "Нэвтрэнэ үү!" });

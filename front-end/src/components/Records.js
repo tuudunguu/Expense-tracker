@@ -40,25 +40,40 @@ export const Records = () => {
   const [date, setDate] = useState("");
   const [statusChoose, setStatusChoose] = useState("");
   const [categoryChoose, setCategoryChoose] = useState("");
-  const Authorization = localStorage.getItem("token");
+
+  // Use `typeof window` check to ensure `localStorage` is accessed on the client side
+  const Authorization =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+  // Debugging log to ensure token is retrieved
 
   const handleCategoryChoose = (category) => {
     setCategoryChoose((prev) => (prev === category ? "" : category));
   };
 
-  console.log(categoryChoose);
+  console.log(categoryChoose); // Debugging log to track selected category
 
+  // Fetch records from the server
   useEffect(() => {
     const getData = async () => {
-      const response = await axios.get("http://localhost:3001/records", {
-        headers: {
-          Authorization: `Bearer ${Authorization}`,
-        },
-      });
-      setRecord(response.data);
+      if (!Authorization) {
+        console.error("Authorization token is missing");
+        return;
+      }
+
+      try {
+        const response = await axios.get("http://localhost:3001/records", {
+          headers: {
+            Authorization: `Bearer ${Authorization}`,
+          },
+        });
+        setRecord(response.data); // Update state with fetched records
+      } catch (error) {
+        console.error("Error fetching records:", error); // Log any errors
+      }
     };
     getData();
-  }, []);
+  }, [Authorization]); // Dependency array now includes Authorization to handle token changes
 
   const TotalMoney = (arr) => {
     let sum = 0;
@@ -74,43 +89,66 @@ export const Records = () => {
   };
 
   const createRecord = async () => {
-    if (!money || !time || !title || !status || !date) {
-      alert("Please fill in all fields.");
-      return;
-    }
+    // if (!money || !time || !title || !status || !date) {
+    //   alert("Please fill in all fields.");
+    //   return;
+    // }
 
     const newRecord = { money, time, title, status, date };
 
     try {
       const response = await axios.post(
         "http://localhost:3001/records",
-        newRecord
+        newRecord,
+        {
+          headers: {
+            Authorization: `Bearer ${Authorization}`,
+          },
+        }
       );
-      setRecord([...record, response.data]);
+      setRecord([...record, response.data]); // Update state with the newly created record
     } catch (error) {
-      console.error("Error creating record:", error);
+      console.error("Error creating record:", error); // Log any errors
     }
   };
 
   const deleteRecord = async (id) => {
-    await axios.delete(`http://localhost:3001/records/${id}`);
-    setRecord((prev) => prev.filter((item) => item.id !== id));
-  };
-
-  useEffect(() => {
-    const getData = async () => {
-      const response = await axios.get("http://localhost:3001/categories", {
+    try {
+      await axios.delete(`http://localhost:3001/records/${id}`, {
         headers: {
           Authorization: `Bearer ${Authorization}`,
         },
       });
-      setCategory(response.data);
+      setRecord((prev) => prev.filter((item) => item.id !== id)); // Remove deleted record from state
+    } catch (error) {
+      console.error("Error deleting record:", error); // Log any errors
+    }
+  };
+
+  // Fetch categories from the server
+  useEffect(() => {
+    const getData = async () => {
+      if (!Authorization) {
+        console.error("Authorization token is missing");
+        return;
+      }
+
+      try {
+        const response = await axios.get("http://localhost:3001/categories", {
+          headers: {
+            Authorization: `Bearer ${Authorization}`,
+          },
+        });
+        setCategory(response.data); // Update state with fetched categories
+      } catch (error) {
+        console.error("Error fetching categories:", error); // Log any errors
+      }
     };
     getData();
-  }, []);
+  }, [Authorization]); // Dependency array now includes Authorization to handle token changes
 
   const handleSliderChange = (newValues) => {
-    setValues(newValues);
+    setValues(newValues); // Update slider values
   };
 
   const createCategory = async () => {
@@ -119,18 +157,34 @@ export const Records = () => {
       categoryIcon,
     };
 
-    const response = await axios.post(
-      "http://localhost:3001/categories",
-      newCategory
-    );
-    setCategory([...category, response.data]);
-
-    setOpen(false);
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/categories",
+        newCategory,
+        {
+          headers: {
+            Authorization: `Bearer ${Authorization}`,
+          },
+        }
+      );
+      setCategory([...category, response.data]); // Update state with the newly created category
+      setOpen(false); // Close the add category modal
+    } catch (error) {
+      console.error("Error creating category:", error); // Log any errors
+    }
   };
 
   const deleteCategory = async (id) => {
-    await axios.delete(`http://localhost:3001/categories/${id}`);
-    setCategory((prev) => prev.filter((item) => item.id !== id));
+    try {
+      await axios.delete(`http://localhost:3001/categories/${id}`, {
+        headers: {
+          Authorization: `Bearer ${Authorization}`,
+        },
+      });
+      setCategory((prev) => prev.filter((item) => item.id !== id)); // Remove deleted category from state
+    } catch (error) {
+      console.error("Error deleting category:", error); // Log any errors
+    }
   };
 
   const categorizeRecords = (records) => {
@@ -179,6 +233,7 @@ export const Records = () => {
         return record;
     }
   };
+
   const selectCategory = (records) => {
     if (!categoryChoose) return records;
     return records.filter((item) => item.title.includes(categoryChoose));

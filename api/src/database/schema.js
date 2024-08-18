@@ -29,8 +29,6 @@ const records = pgTable("records", {
   time: time("time"),
   payee: varchar("payee"),
   note: varchar("note", { length: 256 }),
-  category: varchar("category").references(() => category.id),
-  userId: integer("userId").references(() => users.id),
 });
 
 // Define the category table
@@ -38,7 +36,6 @@ const category = pgTable("category", {
   id: serial("id").primaryKey(),
   categoryIcon: varchar("categoryIcon", { length: 256 }),
   categoryName: varchar("categoryName", { length: 256 }),
-  userId: integer("userId").references(() => users.id),
 });
 
 // Export the modules
