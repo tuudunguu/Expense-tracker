@@ -2,24 +2,21 @@ const fs = require("fs");
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
 const { db } = require("../database/index.js");
-const { category } = require("../database/schema.js");
+const { categories } = require("../database/schema.js");
 
 const getAllCategories = async (req, res) => {
-  const category = await db.query.category.findMany({
-    with: {
-      posts: true,
-    },
-  });
+  const category = await db.query.categories({});
 
   res.json(category);
 };
 
 const createCategory = async (req, res) => {
-  const { userId, categoryIcon, categoryName } = req.body;
+  const { categoryName, categoryIcon } = req.body;
+  console.log(req.body);
 
   const newCategory = await db
-    .insert(category)
-    .values({ userId, categoryIcon, categoryName })
+    .insert(categories)
+    .values({ name: categoryName, icon_name: categoryIcon })
     .returning();
 
   res.json(newCategory);

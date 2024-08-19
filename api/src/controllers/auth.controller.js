@@ -45,7 +45,7 @@ const register = async (req, res) => {
 
   const user = await db
     .insert(users)
-    .values({ id: "1", name, email, password })
+    .values({ name, email, password })
     .returning();
 
   res.json(user);
