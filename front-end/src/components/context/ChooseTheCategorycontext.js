@@ -11,7 +11,15 @@ export const CategoryContextProvider = ({ children }) => {
   const [categoryIcon, setCategoryIcon] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const Authorization = localStorage.getItem("token");
+  const [Authorization, setAuthorization] = useState(null); // 1. Create a state to store the token
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      // 2. Check if window (and therefore localStorage) is available
+      const token = localStorage.getItem("token");
+      setAuthorization(token); // 3. Set the token in state if it exists
+    }
+  }, []); // 4. Empty dependency array to run only on client-side
 
   useEffect(() => {
     const getData = async () => {
@@ -19,7 +27,7 @@ export const CategoryContextProvider = ({ children }) => {
       try {
         const response = await axios.get("http://localhost:3001/categories", {
           headers: {
-            Authorization: `Bearer ${Authorization}`,
+            Authorization: `Bearer ${Authorization}`, // 5. Use the state variable for the token
           },
         });
         setCategory(response.data);
@@ -30,8 +38,12 @@ export const CategoryContextProvider = ({ children }) => {
         setLoading(false);
       }
     };
-    getData();
-  }, []);
+
+    if (Authorization) {
+      // 6. Ensure the token is set before making the API call
+      getData();
+    }
+  }, [Authorization]); // 7. Add Authorization as a dependency to trigger the effect when it changes
 
   const createCategory = async () => {
     const newCategory = {
@@ -43,7 +55,12 @@ export const CategoryContextProvider = ({ children }) => {
       setLoading(true);
       const response = await axios.post(
         "http://localhost:3001/categories",
-        newCategory
+        newCategory,
+        {
+          headers: {
+            Authorization: `Bearer ${Authorization}`, // 8. Add the Authorization header to the post request
+          },
+        }
       );
       setCategory([...category, response.data]);
       // Optionally reset input fields after creation
@@ -60,7 +77,11 @@ export const CategoryContextProvider = ({ children }) => {
   const deleteCategory = async (id) => {
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:3001/categories/${id}`);
+      await axios.delete(`http://localhost:3001/categories/${id}`, {
+        headers: {
+          Authorization: `Bearer ${Authorization}`, // 9. Add the Authorization header to the delete request
+        },
+      });
       setCategory((prev) => prev.filter((item) => item.id !== id));
     } catch (error) {
       setError("Failed to delete category");

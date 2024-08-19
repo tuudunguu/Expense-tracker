@@ -7,7 +7,7 @@ import { useAuth } from "@/components/context/AuthProvider";
 import { useState } from "react";
 
 export default function Home() {
-  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -31,9 +31,9 @@ export default function Home() {
                 type="name"
                 placeholder="Name"
                 className="bg-[#F3F4F6] rounded-[8px] border-2 border-[#D1D5DB] h-12"
-                value={username}
+                value={name}
                 onChange={(e) => {
-                  setUsername(e.target.value);
+                  setName(e.target.value);
                 }}
               />
               <Input
@@ -62,7 +62,7 @@ export default function Home() {
               <Button
                 variant="outline"
                 className="w-full rounded-2xl bg-[#0166FF]"
-                onClick={() => register(username, email, password)}
+                onClick={() => register(name, email, password)}
               >
                 <h3 className="text-xl font-normal text-white">Sign up</h3>
               </Button>

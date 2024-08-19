@@ -1,47 +1,57 @@
-// Import necessary functions from drizzle-orm/pg-core
+const { relations } = require("drizzle-orm");
 const {
   integer,
   pgTable,
   serial,
+  timestamp,
   varchar,
-  pgEnum,
-  date,
-  time,
 } = require("drizzle-orm/pg-core");
 
-// Define the enum
-const recordTypeEnum = pgEnum("recordType", ["Income", "Expense"]);
-
-// Define the users table
 const users = pgTable("users", {
   id: serial("id").primaryKey(),
-  name: varchar("name", { length: 256 }),
-  email: varchar("email", { length: 256 }),
-  password: varchar("password", { length: 256 }),
+  name: varchar("name", { length: 256 }).notNull(),
+  password: varchar("password", { length: 256 }).notNull(),
+  email: varchar("email", { length: 256 }).notNull().unique(),
 });
-
-// Define the records table
 const records = pgTable("records", {
   id: serial("id").primaryKey(),
+  userId: integer("userId"),
+  categoryId: integer("categoryId"),
   amount: integer("amount"),
-  type: recordTypeEnum("type"),
-  date: date("date"),
-  time: time("time"),
-  payee: varchar("payee"),
+  transaction_type: varchar("transaction_type", { length: 256 }),
+  payee: varchar("payee", { length: 256 }),
   note: varchar("note", { length: 256 }),
 });
 
-// Define the category table
-const category = pgTable("category", {
+const categories = pgTable("categories", {
   id: serial("id").primaryKey(),
-  categoryIcon: varchar("categoryIcon", { length: 256 }),
-  categoryName: varchar("categoryName", { length: 256 }),
+  name: varchar("name", { length: 256 }),
+  icon_name: varchar("icon_name", { length: 256 }),
 });
 
-// Export the modules
+const usersRelations = relations(users, ({ many }) => ({
+  records: many(records),
+}));
+
+const categoryRelations = relations(categories, ({ many }) => ({
+  records: many(records),
+}));
+
+const recordsRelations = relations(records, ({ one }) => ({
+  user: one(users, {
+    fields: [records.userId],
+    references: [users.id],
+  }),
+  category: one(categories, {
+    fields: [records.categoryId],
+    references: [categories.id],
+  }),
+}));
 module.exports = {
-  recordTypeEnum,
   users,
   records,
-  category,
+  categories,
+  usersRelations,
+  recordsRelations,
+  categoryRelations,
 };

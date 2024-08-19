@@ -1,14 +1,13 @@
 const jwt = require("jsonwebtoken");
 const { v4 } = require("uuid");
-const { db } = require("../database/index.js"); // Replace with your actual database connection
-const { users } = require("../database/index.js");
+const { db } = require("../database/index.js");
+const { users } = require("../database/schema.js");
 
-// Login function
 const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const users = await db.query.users.findMany();
+    const users = await db.query.users.findMany({});
 
     const user = users.find(
       (user) => user.email === email && user.password === password
@@ -42,9 +41,11 @@ const login = async (req, res) => {
 const register = async (req, res) => {
   const { name, email, password } = req.body;
 
+  console.log(name, email, password);
+
   const user = await db
     .insert(users)
-    .values({ name, email, password })
+    .values({ id: "1", name, email, password })
     .returning();
 
   res.json(user);

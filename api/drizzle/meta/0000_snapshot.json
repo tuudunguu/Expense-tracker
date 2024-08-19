@@ -1,5 +1,5 @@
 {
-  "id": "f118665c-29f3-4a0f-9b77-6f1c54cdf13f",
+  "id": "b2f6e178-f2f7-4995-a1d8-32cf5bcd614f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -18,25 +18,33 @@
           "name": "name",
           "type": "varchar(256)",
           "primaryKey": false,
-          "notNull": false
-        },
-        "email": {
-          "name": "email",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "password": {
           "name": "password",
           "type": "varchar(256)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      }
     },
     "public.records": {
       "name": "records",
@@ -48,34 +56,33 @@
           "primaryKey": true,
           "notNull": true
         },
+        "userId": {
+          "name": "userId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "categoryId": {
+          "name": "categoryId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
         "amount": {
           "name": "amount",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
-        "type": {
-          "name": "type",
-          "type": "recordType",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "date": {
-          "name": "date",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "time": {
-          "name": "time",
-          "type": "time",
+        "transaction_type": {
+          "name": "transaction_type",
+          "type": "varchar(256)",
           "primaryKey": false,
           "notNull": false
         },
         "payee": {
           "name": "payee",
-          "type": "varchar",
+          "type": "varchar(256)",
           "primaryKey": false,
           "notNull": false
         },
@@ -84,54 +91,15 @@
           "type": "varchar(256)",
           "primaryKey": false,
           "notNull": false
-        },
-        "category": {
-          "name": "category",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "userId": {
-          "name": "userId",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "records_category_category_id_fk": {
-          "name": "records_category_category_id_fk",
-          "tableFrom": "records",
-          "tableTo": "category",
-          "columnsFrom": [
-            "category"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "records_userId_users_id_fk": {
-          "name": "records_userId_users_id_fk",
-          "tableFrom": "records",
-          "tableTo": "users",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.category": {
-      "name": "category",
+    "public.categories": {
+      "name": "categories",
       "schema": "",
       "columns": {
         "id": {
@@ -140,55 +108,26 @@
           "primaryKey": true,
           "notNull": true
         },
-        "categoryIcon": {
-          "name": "categoryIcon",
+        "name": {
+          "name": "name",
           "type": "varchar(256)",
           "primaryKey": false,
           "notNull": false
         },
-        "categoryName": {
-          "name": "categoryName",
+        "icon_name": {
+          "name": "icon_name",
           "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "userId": {
-          "name": "userId",
-          "type": "integer",
           "primaryKey": false,
           "notNull": false
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "category_userId_users_id_fk": {
-          "name": "category_userId_users_id_fk",
-          "tableFrom": "category",
-          "tableTo": "users",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     }
   },
-  "enums": {
-    "public.recordType": {
-      "name": "recordType",
-      "schema": "public",
-      "values": [
-        "Income",
-        "Expense"
-      ]
-    }
-  },
+  "enums": {},
   "schemas": {},
   "sequences": {},
   "_meta": {
