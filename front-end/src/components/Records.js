@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { parseISO, isSameDay, subDays, subWeeks, subMonths } from "date-fns";
+import { api } from "@/lib/axios";
 
 export const Records = () => {
   const [values, setValues] = useState([0, 1000]);
@@ -97,7 +98,7 @@ export const Records = () => {
     const newRecord = { money, time, title, status, date };
 
     try {
-      const response = await axios.post(
+      const response = await api.post(
         "http://localhost:3001/records",
         newRecord,
         {
@@ -125,7 +126,6 @@ export const Records = () => {
     }
   };
 
-  // Fetch categories from the server
   useEffect(() => {
     const getData = async () => {
       if (!Authorization) {
@@ -134,11 +134,12 @@ export const Records = () => {
       }
 
       try {
-        const response = await axios.get("http://localhost:3001/categories", {
+        const response = await api.get("http://localhost:3001/categories", {
           headers: {
             Authorization: `Bearer ${Authorization}`,
           },
         });
+        console.log("HHHH", response);
         setCategory(response.data); // Update state with fetched categories
       } catch (error) {
         console.error("Error fetching categories:", error); // Log any errors
@@ -158,7 +159,7 @@ export const Records = () => {
     };
 
     try {
-      const response = await axios.post(
+      const response = await api.post(
         "http://localhost:3001/categories",
         newCategory,
         {
@@ -168,6 +169,7 @@ export const Records = () => {
         }
       );
       setCategory([...category, response.data]); // Update state with the newly created category
+      console.log("Fetched Categories:", response.data);
       setOpen(false); // Close the add category modal
     } catch (error) {
       console.error("Error creating category:", error); // Log any errors
@@ -176,7 +178,7 @@ export const Records = () => {
 
   const deleteCategory = async (id) => {
     try {
-      await axios.delete(`http://localhost:3001/categories/${id}`, {
+      await api.delete(`http://localhost:3001/categories/${id}`, {
         headers: {
           Authorization: `Bearer ${Authorization}`,
         },
@@ -199,16 +201,23 @@ export const Records = () => {
     const lastMonthRecords = [];
 
     records.forEach((record) => {
-      const recordDate = parseISO(record.date);
+      // Check if `record.date` is defined and valid
+      if (record.date) {
+        const recordDate = parseISO(record.date);
 
-      if (isSameDay(recordDate, today)) {
-        todayRecords.push(record);
-      } else if (isSameDay(recordDate, yesterday)) {
-        yesterdayRecords.push(record);
-      } else if (recordDate >= lastWeek) {
-        lastWeekRecords.push(record);
-      } else if (recordDate >= lastMonth) {
-        lastMonthRecords.push(record);
+        if (isSameDay(recordDate, today)) {
+          todayRecords.push(record);
+        } else if (isSameDay(recordDate, yesterday)) {
+          yesterdayRecords.push(record);
+        } else if (recordDate >= lastWeek) {
+          lastWeekRecords.push(record);
+        } else if (recordDate >= lastMonth) {
+          lastMonthRecords.push(record);
+        }
+      } else {
+        console.warn(
+          `Record with title "${record.title}" is missing a valid date.`
+        );
       }
     });
 
@@ -245,6 +254,7 @@ export const Records = () => {
 
   const { todayRecords, yesterdayRecords, lastWeekRecords, lastMonthRecords } =
     categorizeRecords(filteredRecordsByCategory);
+  console.log(filteredRecordsByCategory);
 
   return (
     <Container background="bg-[#F3F4F6]" height="h-[1080px]">
@@ -308,7 +318,7 @@ export const Records = () => {
                   {category.map((item) => (
                     <Category
                       key={item.id}
-                      content={item.categoryName}
+                      content={item.name}
                       onDelete={() => deleteCategory(item.id)}
                       onClick={() => handleCategoryChoose(item.categoryName)}
                     />

@@ -1,5 +1,5 @@
 {
-  "id": "2c27377d-09d2-4b31-ae5f-1bd8f3a37247",
+  "id": "f47ce000-0e10-4585-bf97-842780f3051b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -71,6 +71,18 @@
         "amount": {
           "name": "amount",
           "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date": {
+          "name": "date",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "time": {
+          "name": "time",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": false
         },

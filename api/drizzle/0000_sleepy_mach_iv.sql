@@ -5,17 +5,19 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"email" varchar(256) NOT NULL,
 	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
-
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "records" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"userId" integer,
 	"categoryId" integer,
 	"amount" integer,
+	"date" varchar,
+	"time" varchar,
 	"transaction_type" varchar(256),
 	"payee" varchar(256),
 	"note" varchar(256)
 );
-
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "categories" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" varchar(256),

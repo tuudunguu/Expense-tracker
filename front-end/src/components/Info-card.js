@@ -75,8 +75,6 @@ export const InfoCard = ({
   onDelete,
   status,
 }) => {
-  const [categoryName, iconName] = title.split(", ").map((item) => item.trim());
-
   // Find the icon component that matches the `icon` prop
   const IconComponent = icons.find((item) => item.label === iconName)?.icon;
 

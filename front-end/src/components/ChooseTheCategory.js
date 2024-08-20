@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Select,
   SelectContent,
@@ -41,8 +42,6 @@ import {
   SiHomebridge,
 } from "react-icons/si";
 import { TbBoxMultiple7 } from "react-icons/tb";
-import React from "react";
-
 import { AddCategory } from "./OverlayAddCategory";
 
 // Create a mapping of icon names to icon components
@@ -54,9 +53,7 @@ const iconMap = {
   GiBoxingGloveSurprise: GiBoxingGloveSurprise,
   TbBoxMultiple7: TbBoxMultiple7,
   SiScrapbox: SiScrapbox,
-
   SiHomebridge: SiHomebridge,
-
   FaCamera: FaCamera,
   FaCoffee: FaCoffee,
   FaBeer: FaBeer,
@@ -91,6 +88,10 @@ export const ChooseTheCategory = ({
   setTitle,
   title,
 }) => {
+  // Flatten the category array if it contains nested arrays
+
+  console.log(category);
+
   return (
     <Select
       value={title}
@@ -114,16 +115,15 @@ export const ChooseTheCategory = ({
         />
 
         {category?.map((item) => {
-          const Icon = iconMap[item.categoryIcon];
+          const Icon = iconMap[item.icon_name];
           return (
             <SelectItem
               key={item.id}
-              value={`${item.categoryName}, ${item.categoryIcon}`}
+              value={`${item.id}, ${item.id}`} // Ensure you are using the correct properties
             >
               <div className="flex flex-row justify-start items-center gap-x-3">
                 {Icon && <Icon className="w-6 h-6 " />}
-
-                <span>{item.categoryName}</span>
+                <span>{item.name}</span>
               </div>
             </SelectItem>
           );

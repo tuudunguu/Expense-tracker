@@ -16,8 +16,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isReady, setIsReady] = useState(false);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   const login = async (email, password) => {
     try {
       const res = await api.post("/auth/login", { email, password });
@@ -34,10 +32,6 @@ export const AuthProvider = ({ children }) => {
       toast.error(err.message);
     }
   };
-
-  useEffect(() => {
-    if (!isLoggedIn) router.push("/Log-in");
-  }, [isLoggedIn]);
 
   const register = async (name, email, password) => {
     try {
@@ -71,7 +65,7 @@ export const AuthProvider = ({ children }) => {
 
         setUser(res.data);
       } catch (err) {
-        console.log(err);
+        console.log(err, "KKKK");
         localStorage.removeItem("token");
         toast.error("Your session has expired. Please login again.");
       } finally {
@@ -86,6 +80,10 @@ export const AuthProvider = ({ children }) => {
     if (authPaths.includes(pathname)) return;
 
     if (!isReady) return;
+
+    if (user) return;
+
+    router.push("/Log-in");
   }, [pathname, user, isReady]);
 
   if (!isReady) return null;

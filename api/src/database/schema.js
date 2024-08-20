@@ -18,6 +18,8 @@ const records = pgTable("records", {
   userId: integer("userId"),
   categoryId: integer("categoryId"),
   amount: integer("amount"),
+  date: varchar("date"),
+  time: varchar("time"),
   transaction_type: varchar("transaction_type", { length: 256 }),
   payee: varchar("payee", { length: 256 }),
   note: varchar("note", { length: 256 }),
