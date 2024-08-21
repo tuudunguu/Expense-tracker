@@ -254,7 +254,9 @@ export const Records = () => {
 
   const { todayRecords, yesterdayRecords, lastWeekRecords, lastMonthRecords } =
     categorizeRecords(filteredRecordsByCategory);
-  console.log(filteredRecordsByCategory);
+  console.group(record);
+
+  console.log("JJJJ", todayRecords);
 
   return (
     <Container background="bg-[#F3F4F6]" height="h-[1080px]">
@@ -410,17 +412,17 @@ export const Records = () => {
                 <div className="w-full h-fit flex flex-col justify-center items-start gap-y-3">
                   <h5>Today</h5>
                   <div className="w-full h-fit flex flex-col justify-center items-center gap-y-3">
-                    {todayRecords.map((item, index) => (
+                    {todayRecords.map((item) => {
                       <InfoCard
-                        key={item.title + index}
-                        title={item.title}
+                        key={item.id}
                         time={item.time}
-                        number={item.money}
-                        icon={item.categoryIcon}
+                        amount={item.amount}
+                        category={item.category.name}
+                        icon={item.category.icon_name}
+                        status={item.transaction_type}
                         onDelete={() => deleteRecord(item.id)}
-                        status={item.status}
-                      />
-                    ))}
+                      />;
+                    })}
                   </div>
                 </div>
               )}
@@ -428,17 +430,17 @@ export const Records = () => {
                 <div className="w-full h-fit flex flex-col justify-center items-start gap-y-3">
                   <h5>Yesterday</h5>
                   <div className="w-full h-fit flex flex-col justify-center items-center gap-y-3">
-                    {yesterdayRecords.map((item, index) => (
+                    {yesterdayRecords.map((item) => {
                       <InfoCard
-                        key={item.title + index}
-                        title={item.title}
+                        key={item.id}
                         time={item.time}
-                        number={item.money}
-                        icon={item.categoryIcon}
+                        amount={item.amount}
+                        category={item.category.name}
+                        icon={item.category.icon_name}
+                        status={item.transaction_type}
                         onDelete={() => deleteRecord(item.id)}
-                        status={item.status}
-                      />
-                    ))}
+                      />;
+                    })}
                   </div>
                 </div>
               )}
@@ -446,17 +448,17 @@ export const Records = () => {
                 <div className="w-full h-fit flex flex-col justify-center items-start gap-y-3">
                   <h5>Last Week</h5>
                   <div className="w-full h-fit flex flex-col justify-center items-center gap-y-3">
-                    {lastWeekRecords.map((item, index) => (
+                    {lastWeekRecords.map((item) => {
                       <InfoCard
-                        key={item.title + index}
-                        title={item.title}
+                        key={item.id}
                         time={item.time}
-                        number={item.money}
-                        icon={item.categoryIcon}
+                        amount={item.amount}
+                        category={item.category.name}
+                        icon={item.category.icon_name}
+                        status={item.transaction_type}
                         onDelete={() => deleteRecord(item.id)}
-                        status={item.status}
-                      />
-                    ))}
+                      />;
+                    })}
                   </div>
                 </div>
               )}
@@ -464,17 +466,17 @@ export const Records = () => {
                 <div className="w-full h-fit flex flex-col justify-center items-start gap-y-3">
                   <h5>Last Month</h5>
                   <div className="w-full h-fit flex flex-col justify-center items-center gap-y-3">
-                    {lastMonthRecords.map((item, index) => (
+                    {lastMonthRecords.map((item) => {
                       <InfoCard
-                        key={item.title + index}
-                        title={item.title}
+                        key={item.id}
                         time={item.time}
-                        number={item.money}
-                        icon={item.categoryIcon}
+                        amount={item.amount}
+                        category={item.category.name}
+                        icon={item.category.icon_name}
+                        status={item.transaction_type}
                         onDelete={() => deleteRecord(item.id)}
-                        status={item.status}
-                      />
-                    ))}
+                      />;
+                    })}
                   </div>
                 </div>
               )}

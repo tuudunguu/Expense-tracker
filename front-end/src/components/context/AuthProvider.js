@@ -24,8 +24,6 @@ export const AuthProvider = ({ children }) => {
 
       setUser(res.data.user);
 
-      setIsLoggedIn(true);
-
       router.push("/");
     } catch (err) {
       console.log(err);

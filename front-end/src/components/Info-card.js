@@ -67,16 +67,16 @@ const icons = [
 ];
 
 export const InfoCard = ({
-  icon,
-  title,
   time,
-  number,
+  amount,
   color,
+  category,
+  icon,
   onDelete,
   status,
 }) => {
-  // Find the icon component that matches the `icon` prop
-  const IconComponent = icons.find((item) => item.label === iconName)?.icon;
+  console.log(icon, "icon");
+  const IconComponent = icons.find((item) => item.label === icon)?.icon;
 
   return (
     <div className="w-full h-[64px] px-6 py-3 flex flex-row justify-between items-center bg-[#FFF] border-1 border-[#E5E7EB] rounded-xl">
@@ -85,7 +85,7 @@ export const InfoCard = ({
         {/* Render the dynamic icon */}
         {IconComponent && <IconComponent className="w-6 h-6" />}
         <div className="w-fit h-full flex flex-col justify-between items-start">
-          <h6>{categoryName}</h6>
+          <h6>{category}</h6>
           <h3 className="text-xs font-normal text-[#6B7280]">{time}</h3>
         </div>
       </div>
@@ -95,7 +95,7 @@ export const InfoCard = ({
             status === "expense" ? "text-red-700" : "text-green-700"
           }`}
         >
-          {status === "expense" ? "-" : "+"} {number}
+          {status === "expense" ? "-" : "+"} {amount}
         </h5>
         <Button onClick={onDelete}>X</Button>
       </div>

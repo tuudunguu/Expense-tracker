@@ -5,14 +5,14 @@ const { db } = require("../database/index.js");
 const { records } = require("../database/schema.js");
 
 const getAllRecords = async (req, res) => {
-  // const posts = await db.query.posts.findMany();
+  // const recordsData = await db.select().from(records);
+  const recordsData = await db.query.records.findMany({
+    with: {
+      category: true,
+    },
+  });
 
-  // res.json(posts);
-  const filePath = path.join(__dirname, "..", "data", "records.json");
-  const rawData = fs.readFileSync(filePath);
-  const records = JSON.parse(rawData);
-
-  res.json(records);
+  res.json(recordsData);
 };
 
 const createRecord = async (req, res) => {
@@ -34,15 +34,8 @@ const createRecord = async (req, res) => {
 };
 
 const deleteRecord = async (req, res) => {
-  const filePath = path.join(__dirname, "..", "data", "records.json");
-
-  const rawData = fs.readFileSync(filePath);
-  const records = JSON.parse(rawData);
-
   const recordId = req.params.id;
-  const updatedRecords = records.filter((record) => record.id !== recordId);
-
-  fs.writeFileSync(filePath, JSON.stringify(updatedRecords));
-  res.status(200).send({ message: "Category deleted successfully" });
+  const removedRecord = await db.delete(records).where(records.id.eq(recordId));
+  res.json(removedRecord);
 };
 module.exports = { getAllRecords, createRecord, deleteRecord };
