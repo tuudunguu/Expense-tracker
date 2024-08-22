@@ -52,8 +52,6 @@ export const Records = () => {
     setCategoryChoose((prev) => (prev === category ? "" : category));
   };
 
-  console.log(categoryChoose); // Debugging log to track selected category
-
   // Fetch records from the server
   useEffect(() => {
     const getData = async () => {
@@ -79,21 +77,23 @@ export const Records = () => {
   const TotalMoney = (arr) => {
     let sum = 0;
     arr.forEach((item) => {
-      const amount = parseFloat(item.money);
-      if (item.status === "expense") {
-        sum -= amount;
+      const total = parseFloat(item.amount);
+      if (item.transaction_type === "expense") {
+        sum -= total;
       } else if (item.status === "income") {
-        sum += amount;
+        sum += total;
       }
     });
     return sum;
   };
 
+  console.log("record:", record);
+
   const createRecord = async () => {
-    // if (!money || !time || !title || !status || !date) {
-    //   alert("Please fill in all fields.");
-    //   return;
-    // }
+    if (!money || !time || !title || !status || !date) {
+      alert("Please fill in all fields.");
+      return;
+    }
 
     const newRecord = { money, time, title, status, date };
 
@@ -139,7 +139,7 @@ export const Records = () => {
             Authorization: `Bearer ${Authorization}`,
           },
         });
-        console.log("HHHH", response);
+
         setCategory(response.data); // Update state with fetched categories
       } catch (error) {
         console.error("Error fetching categories:", error); // Log any errors
@@ -169,7 +169,7 @@ export const Records = () => {
         }
       );
       setCategory([...category, response.data]); // Update state with the newly created category
-      console.log("Fetched Categories:", response.data);
+
       setOpen(false); // Close the add category modal
     } catch (error) {
       console.error("Error creating category:", error); // Log any errors
@@ -201,7 +201,6 @@ export const Records = () => {
     const lastMonthRecords = [];
 
     records.forEach((record) => {
-      // Check if `record.date` is defined and valid
       if (record.date) {
         const recordDate = parseISO(record.date);
 
@@ -245,18 +244,16 @@ export const Records = () => {
 
   const selectCategory = (records) => {
     if (!categoryChoose) return records;
-    return records.filter((item) => item.title.includes(categoryChoose));
+    return records.filter((item) =>
+      item.category.name.includes(categoryChoose)
+    );
   };
 
   const filteredRecordsByStatus = selectStatus(statusChoose);
 
   const filteredRecordsByCategory = selectCategory(filteredRecordsByStatus);
-
   const { todayRecords, yesterdayRecords, lastWeekRecords, lastMonthRecords } =
     categorizeRecords(filteredRecordsByCategory);
-  console.group(record);
-
-  console.log("JJJJ", todayRecords);
 
   return (
     <Container background="bg-[#F3F4F6]" height="h-[1080px]">
@@ -322,7 +319,7 @@ export const Records = () => {
                       key={item.id}
                       content={item.name}
                       onDelete={() => deleteCategory(item.id)}
-                      onClick={() => handleCategoryChoose(item.categoryName)}
+                      onClick={() => handleCategoryChoose(item.name)}
                     />
                   ))}
                 </div>
@@ -413,15 +410,17 @@ export const Records = () => {
                   <h5>Today</h5>
                   <div className="w-full h-fit flex flex-col justify-center items-center gap-y-3">
                     {todayRecords.map((item) => {
-                      <InfoCard
-                        key={item.id}
-                        time={item.time}
-                        amount={item.amount}
-                        category={item.category.name}
-                        icon={item.category.icon_name}
-                        status={item.transaction_type}
-                        onDelete={() => deleteRecord(item.id)}
-                      />;
+                      return (
+                        <InfoCard
+                          key={item.id}
+                          time={item.time}
+                          amount={item.amount}
+                          category={item.category?.name || "No category"} // Using optional chaining and providing a fallback
+                          icon={item.category?.icon_name || "No icon"} // Using optional chaining and providing a fallback
+                          status={item.transaction_type}
+                          onDelete={() => deleteRecord(item.id)}
+                        />
+                      );
                     })}
                   </div>
                 </div>
@@ -431,15 +430,17 @@ export const Records = () => {
                   <h5>Yesterday</h5>
                   <div className="w-full h-fit flex flex-col justify-center items-center gap-y-3">
                     {yesterdayRecords.map((item) => {
-                      <InfoCard
-                        key={item.id}
-                        time={item.time}
-                        amount={item.amount}
-                        category={item.category.name}
-                        icon={item.category.icon_name}
-                        status={item.transaction_type}
-                        onDelete={() => deleteRecord(item.id)}
-                      />;
+                      return (
+                        <InfoCard
+                          key={item.id}
+                          time={item.time}
+                          amount={item.amount}
+                          category={item.category?.name || "No category"} // Using optional chaining and providing a fallback
+                          icon={item.category?.icon_name || "No icon"} // Using optional chaining and providing a fallback
+                          status={item.transaction_type}
+                          onDelete={() => deleteRecord(item.id)}
+                        />
+                      );
                     })}
                   </div>
                 </div>
@@ -449,15 +450,17 @@ export const Records = () => {
                   <h5>Last Week</h5>
                   <div className="w-full h-fit flex flex-col justify-center items-center gap-y-3">
                     {lastWeekRecords.map((item) => {
-                      <InfoCard
-                        key={item.id}
-                        time={item.time}
-                        amount={item.amount}
-                        category={item.category.name}
-                        icon={item.category.icon_name}
-                        status={item.transaction_type}
-                        onDelete={() => deleteRecord(item.id)}
-                      />;
+                      return (
+                        <InfoCard
+                          key={item.id}
+                          time={item.time}
+                          amount={item.amount}
+                          category={item.category?.name || "No category"} // Using optional chaining and providing a fallback
+                          icon={item.category?.icon_name || "No icon"} // Using optional chaining and providing a fallback
+                          status={item.transaction_type}
+                          onDelete={() => deleteRecord(item.id)}
+                        />
+                      );
                     })}
                   </div>
                 </div>
@@ -467,15 +470,17 @@ export const Records = () => {
                   <h5>Last Month</h5>
                   <div className="w-full h-fit flex flex-col justify-center items-center gap-y-3">
                     {lastMonthRecords.map((item) => {
-                      <InfoCard
-                        key={item.id}
-                        time={item.time}
-                        amount={item.amount}
-                        category={item.category.name}
-                        icon={item.category.icon_name}
-                        status={item.transaction_type}
-                        onDelete={() => deleteRecord(item.id)}
-                      />;
+                      return (
+                        <InfoCard
+                          key={item.id}
+                          time={item.time}
+                          amount={item.amount}
+                          category={item.category?.name || "No category"} // Using optional chaining and providing a fallback
+                          icon={item.category?.icon_name || "No icon"} // Using optional chaining and providing a fallback
+                          status={item.transaction_type}
+                          onDelete={() => deleteRecord(item.id)}
+                        />
+                      );
                     })}
                   </div>
                 </div>

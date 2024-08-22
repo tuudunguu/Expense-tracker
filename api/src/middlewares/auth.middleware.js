@@ -28,7 +28,7 @@ const authMiddleware = (req, res, next) => {
     next();
   } catch (err) {
     // If token verification fails (e.g., token is invalid or expired), return a 401 Unauthorized response with a JSON error message "Нэвтрэнэ үү!"
-    return res.status(401).json({ error: "Нэвтрэнэ үү! g" });
+    return res.status(401).json({ error: "Нэвтрэнэ үү! " });
   }
 };
 

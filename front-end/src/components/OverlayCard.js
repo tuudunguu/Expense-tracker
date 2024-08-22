@@ -55,9 +55,7 @@ export const OverlayCard = ({
 
   const handleColorChange = () => {
     setExpense(!expense);
-    console.log(expense);
   };
-  console.log(status);
 
   return (
     <Dialog>

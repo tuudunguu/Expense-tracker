@@ -75,7 +75,6 @@ export const InfoCard = ({
   onDelete,
   status,
 }) => {
-  console.log(icon, "icon");
   const IconComponent = icons.find((item) => item.label === icon)?.icon;
 
   return (

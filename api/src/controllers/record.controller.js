@@ -3,16 +3,19 @@ const path = require("path");
 const { v4: uuidv4 } = require("uuid");
 const { db } = require("../database/index.js");
 const { records } = require("../database/schema.js");
+const { eq } = require("drizzle-orm");
 
 const getAllRecords = async (req, res) => {
   // const recordsData = await db.select().from(records);
+  console.log(req.user);
   const recordsData = await db.query.records.findMany({
     with: {
       category: true,
     },
+    where: eq(records.userId, req.user.id),
   });
 
-  res.json(recordsData);
+  res.json([]);
 };
 
 const createRecord = async (req, res) => {
@@ -22,6 +25,7 @@ const createRecord = async (req, res) => {
   const [newRecord] = await db
     .insert(records)
     .values({
+      userId: req.user.id,
       categoryId: numberTitle,
       date: date,
       amount: money,

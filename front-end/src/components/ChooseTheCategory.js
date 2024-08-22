@@ -90,8 +90,6 @@ export const ChooseTheCategory = ({
 }) => {
   // Flatten the category array if it contains nested arrays
 
-  console.log(category);
-
   return (
     <Select
       value={title}
