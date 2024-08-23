@@ -41,8 +41,6 @@ const login = async (req, res) => {
 const register = async (req, res) => {
   const { name, email, password } = req.body;
 
-  console.log(name, email, password);
-
   const user = await db
     .insert(users)
     .values({ name, email, password })
