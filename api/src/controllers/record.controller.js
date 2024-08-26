@@ -12,7 +12,6 @@ const getAllRecords = async (req, res) => {
         category: true,
       },
     });
-    console.log("re", recordsData);
 
     res.json(recordsData);
   } catch (error) {
@@ -38,7 +37,14 @@ const createRecord = async (req, res) => {
       })
       .returning();
 
-    res.json(newRecord);
+    const record = await db.query.records.findFirst({
+      with: {
+        category: true,
+      },
+      where: eq(records.id, newRecord.id),
+    });
+
+    res.json(record);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error creating record" });

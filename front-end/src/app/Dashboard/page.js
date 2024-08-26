@@ -2,6 +2,7 @@ import { Container } from "@/components/Container";
 import { Navbar } from "@/components/Navbar";
 import { FaCircleArrowUp } from "react-icons/fa6";
 import { FaCircleArrowDown } from "react-icons/fa6";
+import { Chart } from "@/components/ChartOfDashboard";
 
 export default function Home() {
   return (
@@ -68,7 +69,9 @@ export default function Home() {
             </div>
           </div>
           <div className="w-full h-[284px] flex gap-6 ">
-            <div className="w-1/2 h-full bg-slate-500 rounded-xl"></div>
+            <div className="w-1/2 h-full bg-slate-500 rounded-xl">
+              <Chart className="w-full h-full" />
+            </div>
             <div className="w-1/2 h-full bg-slate-500 rounded-xl"></div>
           </div>
           <div className="w-full h-[456px] bg-slate-500 rounded-xl"></div>
